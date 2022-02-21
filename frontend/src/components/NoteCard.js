@@ -15,27 +15,44 @@ import IconButton from "@mui/material/IconButton";
 
 const NoteCard = ({ item, index }) => {
     const [pinned, setPinned] = useState(false);
+    const [variant, setVariant] = useState("outlined");
+    const [activeColor, setActiveColor] = useState("#ffffff"); // white
 
     // toggling pin
     const handlePinned = () => {
         setPinned(!pinned);
     };
 
+    const onMouseOver = () => {
+        setActiveColor("iconColorActive");
+        setVariant("elevation");
+    };
+    const onMouseOut = () => {
+        setActiveColor("#ffffff"); // white
+        setVariant("outlined");
+    };
+
     return (
-        <Card variant="outlined" p={1} sx={{ borderRadius: 2 }}>
+        <Card
+            variant={variant}
+            p={1}
+            sx={{ borderRadius: 2 }}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+            raised
+        >
             <CardHeader
                 title={item.title}
                 action={
                     <IconButton onClick={handlePinned}>
                         {pinned ? (
                             <PushPinIcon
-                                color="iconColor"
+                                color={activeColor}
                                 sx={{ fontSize: 20 }}
                             />
                         ) : (
                             <PushPinOutlinedIcon
-                                color="iconColor"
-                                sx={{ fontSize: 20 }}
+                                sx={{ fontSize: 20, color: activeColor }}
                             />
                         )}
                     </IconButton>
@@ -47,21 +64,21 @@ const NoteCard = ({ item, index }) => {
                     <IconButton>
                         <DeleteIcon
                             variant="outlined"
-                            color="iconColor"
-                            sx={{ fontSize: 20 }}
+                            sx={{ fontSize: 20, color: activeColor }}
                         />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="archive">
                     <IconButton>
-                        <ArchiveIcon color="iconColor" sx={{ fontSize: 20 }} />
+                        <ArchiveIcon
+                            sx={{ fontSize: 20, color: activeColor }}
+                        />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="background color">
                     <IconButton>
                         <ColorLensIcon
-                            color="iconColor"
-                            sx={{ fontSize: 20 }}
+                            sx={{ fontSize: 20, color: activeColor }}
                         />
                     </IconButton>
                 </Tooltip>

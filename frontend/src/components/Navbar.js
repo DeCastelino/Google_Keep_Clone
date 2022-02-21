@@ -17,10 +17,16 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import HomeIcon from "@mui/icons-material/Home";
+import LabelIcon from "@mui/icons-material/Label";
+import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { NavLink } from "react-router-dom";
 
@@ -106,7 +112,6 @@ const Search = styled("div")(({ theme }) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    // width: "100%",
     width: "10px",
     [theme.breakpoints.up("sm")]: {
         marginLeft: theme.spacing(3),
@@ -131,7 +136,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create("width"),
-        // width: "100%",
         minWidth: "120px",
         [theme.breakpoints.up("md")]: {
             width: "75ch",
@@ -139,19 +143,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const Navbar = (props) => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+const handleRefresh = () => {
+    window.location.reload();
+};
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
+const Navbar = (props) => {
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [active, setActive] = React.useState(props.active);
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
@@ -216,6 +217,7 @@ const Navbar = (props) => {
                             >
                                 <Tooltip title="Refresh">
                                     <RefreshIcon
+                                        onClick={handleRefresh}
                                         sx={{
                                             cursor: "pointer",
                                             marginRight: 5,
@@ -223,26 +225,122 @@ const Navbar = (props) => {
                                             color: "#5F6368",
                                         }}
                                     />
+                                </Tooltip>
+                                <Tooltip title="Home">
+                                    <NavLink
+                                        to="/home"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
+                                        }}
+                                    >
+                                        {active === "home" ? (
+                                            <HomeIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <HomeOutlinedIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
                                 </Tooltip>
                                 <Tooltip title="Archive">
-                                    <ArchiveOutlinedIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                            marginRight: 5,
-                                            fontSize: 30,
-                                            color: "#5F6368",
+                                    <NavLink
+                                        to="/archive"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
                                         }}
-                                    />
+                                    >
+                                        {active === "archive" ? (
+                                            <ArchiveIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <ArchiveOutlinedIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
+                                </Tooltip>
+                                <Tooltip title="Label">
+                                    <NavLink
+                                        to="/label"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
+                                        }}
+                                    >
+                                        {active === "label" ? (
+                                            <LabelIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <LabelOutlinedIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
                                 </Tooltip>
                                 <Tooltip title="Trash">
-                                    <DeleteOutlineIcon
-                                        sx={{
-                                            cursor: "pointer",
-                                            marginRight: 5,
-                                            fontSize: 30,
-                                            color: "#5F6368",
+                                    <NavLink
+                                        to="/trash"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
                                         }}
-                                    />
+                                    >
+                                        {active === "trash" ? (
+                                            <DeleteIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <DeleteOutlineIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
                                 </Tooltip>
                                 <Tooltip title="Open Profile">
                                     <IconButton
@@ -250,7 +348,6 @@ const Navbar = (props) => {
                                         sx={{ p: 0 }}
                                     >
                                         <Avatar
-                                            alt="Remy Sharp"
                                             src="/static/images/avatar/2.jpg"
                                             sx={{ width: 35, height: 35 }}
                                         />
