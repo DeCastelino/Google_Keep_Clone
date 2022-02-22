@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // MUI components
@@ -10,6 +11,7 @@ import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
+import { UserContext, Context } from "./components/Context/userContext";
 
 const theme = createTheme({
     palette: {
@@ -25,21 +27,50 @@ const theme = createTheme({
 });
 
 function App() {
+    const user = useContext(Context);
     return (
         <div className="App">
-            <ThemeProvider theme={theme}>
-                <Router>
-                    <Routes>
-                        <Route exact path="/" element={<Home />} />
-                        <Route exact path="/home" element={<Home />} />
-                        <Route exact path="/archive" element={<Archive />} />
-                        <Route exact path="/trash" element={<Trash />} />
-                        <Route exact path="/profile" element={<Profile />} />
-                        <Route exact path="/sign-up" element={<Signup />} />
-                        <Route exact path="/login" element={<Login />} />
-                    </Routes>
-                </Router>
-            </ThemeProvider>
+            <UserContext>
+                <ThemeProvider theme={theme}>
+                    <Router>
+                        <Routes>
+                            <Route
+                                exact
+                                path="/"
+                                element={user ? <Home /> : <Login />}
+                            />
+                            <Route
+                                path="/home"
+                                element={user ? <Home /> : <Login />}
+                            />
+                            <Route
+                                path="/archive"
+                                element={user ? <Archive /> : <Login />}
+                            />
+                            <Route
+                                path="/trash"
+                                element={user ? <Trash /> : <Login />}
+                            />
+                            <Route
+                                path="/profile"
+                                element={user ? <Profile /> : <Login />}
+                            />
+                            <Route
+                                path="/sign-up"
+                                element={user ? <Home /> : <Signup />}
+                            />
+                            <Route
+                                path="/login"
+                                element={user ? <Home /> : <Login />}
+                            />
+                            <Route
+                                path="*"
+                                element={user ? <Home /> : <Login />}
+                            />
+                        </Routes>
+                    </Router>
+                </ThemeProvider>
+            </UserContext>
         </div>
     );
 }

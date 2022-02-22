@@ -13,7 +13,7 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
 
-const NoteCard = ({ item, index }) => {
+const NoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(false);
     const [variant, setVariant] = useState("outlined");
     const [activeColor, setActiveColor] = useState("#ffffff"); // white
@@ -42,7 +42,7 @@ const NoteCard = ({ item, index }) => {
             raised
         >
             <CardHeader
-                title={item.title}
+                title={note.title}
                 action={
                     <IconButton onClick={handlePinned}>
                         {pinned ? (
@@ -58,7 +58,7 @@ const NoteCard = ({ item, index }) => {
                     </IconButton>
                 }
             />
-            <CardContent>{item.description}</CardContent>
+            <CardContent>{note.body}</CardContent>
             <CardActions>
                 <Tooltip title="delete">
                     <IconButton>

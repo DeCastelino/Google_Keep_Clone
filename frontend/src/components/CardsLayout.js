@@ -1,21 +1,18 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 // MUI Components
 import { Grid } from "@mui/material";
 
 // Custom Components
-import Data from "../Data.json";
 import NoteCard from "./NoteCard";
 
-const CardsLayout = () => {
-    useEffect(() => {
-        console.log(Data);
-    }, []);
+const CardsLayout = ({ notes }) => {
     return (
         <Grid container spacing={3} pl={5} pr={2}>
-            {Data.map((item, index) => (
+            {notes.map((note) => (
                 <Grid item xs={6} md={3} lg={2.3}>
-                    <NoteCard item={item} index={index} />
+                    <NoteCard note={note} key={note.id} />
                 </Grid>
             ))}
         </Grid>

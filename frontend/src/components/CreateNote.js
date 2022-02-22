@@ -10,30 +10,47 @@ import {
     Tooltip,
     IconButton,
     ClickAwayListener,
+    CardHeader,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import LabelIcon from "@mui/icons-material/Label";
-
+import PushPinIcon from "@mui/icons-material/PushPin";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import axios from "axios";
 const CreateNote = () => {
     const [active, setActive] = useState(false);
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [bgColor, setBgColor] = useState("#ffffff"); // white
     const [labels, setLabels] = useState([]);
+    const [pinned, setPinned] = useState(false);
 
     const handleCreateNote = () => {
         setActive(true);
+    };
+
+    // toggling pin
+    const handlePinned = () => {
+        setPinned(!pinned);
     };
 
     const handleClose = () => {
         if (title === "" && body === "") {
             setActive(false);
         } else {
-            const notesInfo = { title, body, bgColor, labels };
+            const notesInfo = { title, body, bgColor, labels, pinned };
             console.log(notesInfo);
-            window.location.reload(); // Change it to setActive(false)
+            axios
+                .post("http://localhost:8000/uploadNote", notesInfo)
+                .then((res) => {
+                    window.location = "/home";
+                })
+                .catch((err) => {
+                    alert("Error in creating note");
+                });
+            setActive(false);
         }
     };
 
@@ -56,22 +73,47 @@ const CreateNote = () => {
                         {!active ? (
                             <Typography p={2}>Take a note...</Typography>
                         ) : (
-                            <Box p={2} pb={0}>
+                            <Box p={2} pb={0} sx={{ position: "relative" }}>
+                                <CardHeader
+                                    action={
+                                        <IconButton onClick={handlePinned}>
+                                            {pinned ? (
+                                                <PushPinIcon
+                                                    // color={activeColor}
+                                                    sx={{ fontSize: 20 }}
+                                                />
+                                            ) : (
+                                                <PushPinOutlinedIcon
+                                                    sx={{
+                                                        fontSize: 20,
+                                                        // color: activeColor,
+                                                    }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    }
+                                    sx={{
+                                        position: "absolute",
+                                        top: 0,
+                                        right: 0,
+                                    }}
+                                />
                                 <TextField
                                     variant="standard"
                                     placeholder="Title"
-                                    fullWidth
                                     autoFocus
+                                    multiline
                                     size="small"
                                     value={title}
                                     InputProps={{ disableUnderline: true }}
-                                    sx={{ paddingBottom: 2 }}
+                                    sx={{ paddingBottom: 2, width: "90%" }}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                                 <TextField
                                     variant="standard"
                                     placeholder="Take a note..."
                                     fullWidth
+                                    multiline
                                     value={body}
                                     InputProps={{ disableUnderline: true }}
                                     sx={{ paddingBottom: 2 }}
