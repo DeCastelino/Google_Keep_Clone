@@ -83,9 +83,7 @@ const Login = () => {
                     </Button>
                     <Typography pt={3} align="center">
                         Don't have an account? {"  "}
-                        <NavLink to="/sign-up" sx={{ textDecoration: "none" }}>
-                            Sign up
-                        </NavLink>
+                        <NavLink to="/sign-up">Sign up</NavLink>
                     </Typography>
                 </Box>
             </Grid>
