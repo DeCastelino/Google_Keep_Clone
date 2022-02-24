@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect, useContext } from "react";
 import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,6 +15,7 @@ import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
 import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
@@ -29,8 +31,18 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { Context } from "./Context/userContext";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const AccountButton = styled(Button)`
+    padding: 0px 10px;
+    border-color: lightgray;
+    color: gray;
+    &:hover {
+        background-color: offwhite;
+        border-color: lightgray;
+    }
+`;
 
 function ScrollTop(props) {
     const { children, window } = props;
@@ -148,8 +160,16 @@ const handleRefresh = () => {
 };
 
 const Navbar = (props) => {
+    const { user, setUser } = useContext(Context);
+    const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [active, setActive] = React.useState(props.active);
+
+    const handleLogout = () => {
+        setUser(null);
+        window.location.href = "/login";
+    };
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -348,13 +368,15 @@ const Navbar = (props) => {
                                         sx={{ p: 0 }}
                                     >
                                         <Avatar
-                                            src="/static/images/avatar/2.jpg"
+                                            src={user.profilePicture}
                                             sx={{ width: 35, height: 35 }}
                                         />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu
-                                    sx={{ mt: "45px" }}
+                                    sx={{
+                                        mt: "45px",
+                                    }}
                                     id="menu-appbar"
                                     anchorEl={anchorElUser}
                                     anchorOrigin={{
@@ -369,16 +391,54 @@ const Navbar = (props) => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    {settings.map((setting) => (
-                                        <MenuItem
-                                            key={setting}
-                                            onClick={handleCloseUserMenu}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            paddingX: 6,
+                                            paddingY: 2,
+                                        }}
+                                    >
+                                        <Avatar
+                                            src={user.profilePicture}
+                                            sx={{
+                                                width: 100,
+                                                height: 100,
+                                                alignContent: "center",
+                                            }}
+                                        />
+                                        <Typography
+                                            variant="subtitle1"
+                                            color="gray"
+                                            align="center"
+                                            paddingTop={1}
                                         >
-                                            <Typography textAlign="center">
-                                                {setting}
-                                            </Typography>
-                                        </MenuItem>
-                                    ))}
+                                            {user.email}
+                                        </Typography>
+                                        <AccountButton
+                                            variant="outlined"
+                                            sx={{
+                                                borderRadius: 20,
+                                                marginY: 3,
+                                            }}
+                                        >
+                                            Manage your account
+                                        </AccountButton>
+                                        <hr />
+                                        <AccountButton
+                                            variant="outlined"
+                                            sx={{
+                                                marginBottom: 1,
+                                                padding: 1,
+                                                paddingX: 2,
+                                            }}
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </AccountButton>
+                                    </Box>
                                 </Menu>
                             </Box>
                         </Toolbar>

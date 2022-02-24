@@ -30,13 +30,13 @@ const Signup = () => {
                 password,
             };
             axios
-                .post("http://localhost:8000/signup", userInfo)
+                .post("http://localhost:8000/register", userInfo)
                 .then((res) => {
                     window.location.href = "/home";
                 })
                 .catch((err) => {
                     setError(true);
-                    alert("Error signing up");
+                    alert("Email already exists");
                 });
         }
     };
@@ -49,10 +49,7 @@ const Signup = () => {
                     backgroundImage: `url(${StarlitValley})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    // filter: "blur(5px)",
-                    // WebkitFilter: "blur(5px)",
                     height: "100vh",
-                    transform: "scale(1.03)",
                     overflow: "hidden",
                 }}
             >
@@ -88,16 +85,16 @@ const Signup = () => {
                             <TextField
                                 variant="outlined"
                                 label="Firstname"
+                                required
                                 error={error}
-                                width="100%"
                                 onChange={(e) => setFirstname(e.target.value)}
                                 sx={{ paddingRight: 1 }}
                             />
                             <TextField
                                 variant="outlined"
                                 label="Surname"
+                                required
                                 error={error}
-                                width="100%"
                                 onChange={(e) => setSurname(e.target.value)}
                                 sx={{ paddingLeft: 1 }}
                             />
@@ -107,6 +104,7 @@ const Signup = () => {
                                 variant="outlined"
                                 label="Email"
                                 type="email"
+                                required
                                 fullWidth
                                 error={error}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -117,6 +115,7 @@ const Signup = () => {
                                 variant="outlined"
                                 label="Password"
                                 type="password"
+                                required
                                 fullWidth
                                 error={error}
                                 onChange={(e) => setPassword(e.target.value)}

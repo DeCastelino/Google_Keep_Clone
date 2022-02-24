@@ -11,7 +11,7 @@ import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
-import { UserContext, Context } from "./components/Context/userContext";
+import { Context } from "./components/Context/userContext";
 
 const theme = createTheme({
     palette: {
@@ -27,50 +27,41 @@ const theme = createTheme({
 });
 
 function App() {
-    const user = useContext(Context);
+    const { user } = useContext(Context);
     return (
         <div className="App">
-            <UserContext>
-                <ThemeProvider theme={theme}>
-                    <Router>
-                        <Routes>
-                            <Route
-                                exact
-                                path="/"
-                                element={user ? <Home /> : <Login />}
-                            />
-                            <Route
-                                path="/home"
-                                element={user ? <Home /> : <Login />}
-                            />
-                            <Route
-                                path="/archive"
-                                element={user ? <Archive /> : <Login />}
-                            />
-                            <Route
-                                path="/trash"
-                                element={user ? <Trash /> : <Login />}
-                            />
-                            <Route
-                                path="/profile"
-                                element={user ? <Profile /> : <Login />}
-                            />
-                            <Route
-                                path="/sign-up"
-                                element={user ? <Home /> : <Signup />}
-                            />
-                            <Route
-                                path="/login"
-                                element={user ? <Home /> : <Login />}
-                            />
-                            <Route
-                                path="*"
-                                element={user ? <Home /> : <Login />}
-                            />
-                        </Routes>
-                    </Router>
-                </ThemeProvider>
-            </UserContext>
+            <ThemeProvider theme={theme}>
+                <Router>
+                    <Routes>
+                        <Route exact path="/" element={<Home />} />
+                        <Route
+                            path="/home"
+                            element={user ? <Home /> : <Login />}
+                        />
+                        <Route
+                            path="/archive"
+                            element={user ? <Archive /> : <Login />}
+                        />
+                        <Route
+                            path="/trash"
+                            element={user ? <Trash /> : <Login />}
+                        />
+                        <Route
+                            path="/profile"
+                            element={user ? <Profile /> : <Login />}
+                        />
+                        <Route
+                            path="/sign-up"
+                            element={user ? <Home /> : <Signup />}
+                        />
+                        <Route
+                            path="/login"
+                            element={user ? <Home /> : <Login />}
+                        />
+                        <Route path="*" element={user ? <Home /> : <Login />} />
+                    </Routes>
+                </Router>
+            </ThemeProvider>
         </div>
     );
 }

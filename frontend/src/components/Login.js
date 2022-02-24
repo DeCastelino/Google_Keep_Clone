@@ -20,12 +20,14 @@ const Login = () => {
     const handleSubmit = () => {
         if (email === "" || password === "") setError(true);
         else {
-            const userInfo = { email, password };
+            const userInfo = { email: email.toLowerCase(), password };
             axios
                 .post("http://localhost:8000/login", userInfo)
                 .then((res) => {
                     // store user info into localstorage
+                    console.log(res.data);
                     setUser(res.data);
+                    window.location.href = "/home";
                 })
                 .catch((err) => {
                     setError(true);

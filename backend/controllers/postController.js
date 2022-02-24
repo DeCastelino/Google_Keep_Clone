@@ -1,4 +1,4 @@
-import { db } from "../firestoreDatabase/db.js";
+import { db } from "../firestore/db.js";
 
 const get_all_posts = async (req, res) => {
     await db
