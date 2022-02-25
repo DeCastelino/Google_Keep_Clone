@@ -33,6 +33,8 @@ import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { Context } from "./Context/userContext";
+import { Dialog } from "@mui/material";
+import Settings from "./Setting";
 
 const AccountButton = styled(Button)`
     padding: 0px 10px;
@@ -161,14 +163,17 @@ const handleRefresh = () => {
 
 const Navbar = (props) => {
     const { user, setUser } = useContext(Context);
-    const [password, setPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [active, setActive] = React.useState(props.active);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [active, setActive] = useState(props.active);
+    const [open, setOpen] = useState(false);
 
     const handleLogout = () => {
         setUser(null);
         window.location.href = "/login";
+    };
+
+    const toggleSettings = () => {
+        setOpen(!open);
     };
 
     const handleOpenUserMenu = (event) => {
@@ -423,16 +428,17 @@ const Navbar = (props) => {
                                                 borderRadius: 20,
                                                 marginY: 3,
                                             }}
+                                            onClick={toggleSettings}
                                         >
                                             Manage your account
                                         </AccountButton>
-                                        <hr />
                                         <AccountButton
                                             variant="outlined"
                                             sx={{
                                                 marginBottom: 1,
                                                 padding: 1,
                                                 paddingX: 2,
+                                                borderRadius: 2,
                                             }}
                                             onClick={handleLogout}
                                         >
@@ -440,6 +446,10 @@ const Navbar = (props) => {
                                         </AccountButton>
                                     </Box>
                                 </Menu>
+                                <Settings
+                                    open={open}
+                                    toggleSettings={toggleSettings}
+                                />
                             </Box>
                         </Toolbar>
                     </Container>
