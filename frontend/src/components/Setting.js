@@ -40,7 +40,7 @@ const Input = styled("input")`
 `;
 
 const Settings = ({ open, toggleSettings }) => {
-    const { user, setUser } = useContext(Context);
+    const { user } = useContext(Context);
     const [expanded, setExpanded] = useState(false);
     const [firstname, setFirstname] = useState(user.firstname);
     const [surname, setSurname] = useState(user.surname);
@@ -61,7 +61,7 @@ const Settings = ({ open, toggleSettings }) => {
         data.append("name", filename);
         data.append("file", file);
         data.append("email", user.email);
-        axios.post("http://localhost:8081/upload", data).then((res) => {
+        axios.post("http://localhost:8000/upload", data).then((res) => {
             user.profilePicture = res.data;
         });
     };
@@ -143,19 +143,20 @@ const Settings = ({ open, toggleSettings }) => {
                             <label>
                                 <Input
                                     accept="image/*"
-                                    id="contained-button-file"
-                                    multiple
+                                    id="file"
+                                    name="file"
                                     type="file"
+                                    onChange={uploadProfilePicture}
                                 />
-                                <Fab
+                                <Button
                                     variant="contained"
                                     color="primary"
                                     size="small"
                                     component="span"
-                                    onChange={uploadProfilePicture}
                                 >
-                                    <EditOutlinedIcon />
-                                </Fab>
+                                    {/* <EditOutlinedIcon /> */}
+                                    Upload
+                                </Button>
                             </label>
                         }
                     >

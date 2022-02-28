@@ -5,7 +5,7 @@ const Archive = () => {
     return (
         <div>
             <Navbar active={"archive"} />
-            <CardsLayout />
+            {/* <CardsLayout /> */}
         </div>
     );
 };

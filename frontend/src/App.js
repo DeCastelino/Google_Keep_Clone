@@ -8,7 +8,6 @@ import { createTheme, ThemeProvider } from "@material-ui/core";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Profile from "./components/Profile";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
 import { Context } from "./components/Context/userContext";
@@ -33,7 +32,11 @@ function App() {
             <ThemeProvider theme={theme}>
                 <Router>
                     <Routes>
-                        <Route exact path="/" element={<Home />} />
+                        <Route
+                            exact
+                            path="/"
+                            element={user ? <Home /> : <Login />}
+                        />
                         <Route
                             path="/home"
                             element={user ? <Home /> : <Login />}
@@ -45,10 +48,6 @@ function App() {
                         <Route
                             path="/trash"
                             element={user ? <Trash /> : <Login />}
-                        />
-                        <Route
-                            path="/profile"
-                            element={user ? <Profile /> : <Login />}
                         />
                         <Route
                             path="/sign-up"

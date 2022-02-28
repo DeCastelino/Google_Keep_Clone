@@ -1,25 +1,18 @@
-import express from "express";
-import {
-    user_register,
-    user_login,
-    upload_image,
-    update_name,
-    update_email,
-    update_password,
-} from "../controllers/userController.js";
-import { get_all_posts, upload_post } from "../controllers/postController.js";
-import { upload } from "../middleware/multer.js";
+const express = require("express");
+const userController = require("../controllers/userController");
+const postController = require("../controllers/postController");
+const { upload } = require("../middleware/multer");
 const router = express.Router();
 
 // GET ROUTES
-router.get("/", get_all_posts);
+router.get("/", postController.get_all_posts);
 
 // POST ROUTES
-router.post("/uploadPost", upload_post);
-router.post("/register", user_register);
-router.post("/login", user_login);
-router.post("/upload", upload.single("file"), upload_image);
-router.post("/updateName", update_name);
-router.post("/updateEmail", update_email);
-router.post("/updatePassword", update_password);
-export { router };
+router.post("/uploadPost", postController.upload_post);
+router.post("/register", userController.user_register);
+router.post("/login", userController.user_login);
+router.post("/upload", upload.single("file"), userController.upload_image);
+router.post("/updateName", userController.update_name);
+router.post("/updateEmail", userController.update_email);
+router.post("/updatePassword", userController.update_password);
+module.exports = router;

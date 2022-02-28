@@ -427,6 +427,7 @@ const Navbar = (props) => {
                                             sx={{
                                                 borderRadius: 20,
                                                 marginY: 3,
+                                                paddingX: 3,
                                             }}
                                             onClick={toggleSettings}
                                         >
@@ -436,9 +437,8 @@ const Navbar = (props) => {
                                             variant="outlined"
                                             sx={{
                                                 marginBottom: 1,
-                                                padding: 1,
-                                                paddingX: 2,
-                                                borderRadius: 2,
+                                                paddingY: 1,
+                                                paddingX: 3,
                                             }}
                                             onClick={handleLogout}
                                         >

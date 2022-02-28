@@ -1,26 +1,20 @@
-import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
-import { initializeApp, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { Storage } from "@google-cloud/storage";
-import serviceAccount from "../serviceAccountKey.json" assert { type: "json" };
-import serviceAccountCloudKey from "../keep-notes-342206-8bcc0c612e2c.json" assert { type: "json" };
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, "../config.env") });
+const admin = require("firebase-admin");
+const { Storage } = require("@google-cloud/storage");
+const serviceAccount = require("../serviceAccountKey.json");
+require("dotenv").config({ path: "./config.env" });
 
 // Initializing firebase object
-initializeApp({
-    credential: cert(serviceAccount),
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
 });
 
 const bucketName = process.env.BUCKET_NAME;
-const storage = new Storage({ keyFilename: serviceAccountCloudKey });
+const storage = new Storage();
 const bucket = storage.bucket(bucketName);
 
-const db = getFirestore();
+const db = admin.firestore();
+
+db.settings({ timestampsInSnapshots: true });
 
 // Uploading file to google cloud storage
 async function uploadFile(absoluteFilePath, destFileName) {
@@ -29,4 +23,8 @@ async function uploadFile(absoluteFilePath, destFileName) {
     });
 }
 
-export { db, uploadFile };
+module.exports = {
+    db,
+    bucket,
+    uploadFile,
+};

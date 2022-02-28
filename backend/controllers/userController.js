@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
-import { db } from "../firestore/db.js";
-import { fileURLToPath } from "url";
+const bcrypt = require("bcrypt");
+const { db, bucket, uploadFile } = require("../firestore/db");
+const path = require("path");
 
 const user_register = async (req, res) => {
     const user = await db
@@ -46,12 +46,9 @@ const user_login = (req, res) => {
 };
 
 const upload_image = (req, res) => {
-    console.log(req.file);
     // If file is invalid
     if (req.file === undefined) res.sendStatus(404);
     // Create a checking system to check file extensions using the already existing function.
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
     const absoluteFilePath =
         path.resolve(__dirname, "..") + "/" + req.file.path;
     const destFileName = req.file.filename;
@@ -60,8 +57,8 @@ const upload_image = (req, res) => {
     uploadFile(absoluteFilePath, destFileName).catch(console.error);
 
     // Fetching public link to the file from google cloud storage
-    var fileRef = bucket.file(destFileName);
-    publicUrl = fileRef.publicUrl();
+    const fileRef = bucket.file(destFileName);
+    const publicUrl = fileRef.publicUrl();
     res.status(200).json(publicUrl);
 };
 
@@ -131,7 +128,7 @@ const update_password = (req, res) => {
             res.sendStatus(404);
         });
 };
-export {
+module.exports = {
     user_register,
     user_login,
     upload_image,

@@ -1,5 +1,5 @@
-import multer from "multer";
-import path from "path";
+// import multer, { diskStorage } from "multer";
+const multer = require("multer");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -11,18 +11,19 @@ const storage = multer.diskStorage({
 });
 
 // Check File Type
-function checkFileType(file) {
-    // Allowed extensions
-    const allowedExtensions = /jpeg|jpg|png|gif/;
-    // Check extension
-    const extname = allowedExtensions.test(
-        path.extname(file.originalname).toLowerCase()
-    );
-    // Check mime
-    const mimetype = allowedExtensions.test(file.mimetype);
+// export function checkFileType(file) {
+//     // Allowed extensions
+//     const allowedExtensions = /jpeg|jpg|png|gif/;
+//     // Check extension
+//     const extname = allowedExtensions.test(
+//         path.extname(file.originalname).toLowerCase()
+//     );
+//     // Check mime
+//     const mimetype = allowedExtensions.test(file.mimetype);
 
-    if (extname && mimetype) return true;
-    return false;
-}
-const upload = multer({ storage: storage });
-export { upload, checkFileType };
+//     if (extname && mimetype) return true;
+//     return false;
+// }
+module.exports = {
+    upload: multer({ storage: storage }),
+};

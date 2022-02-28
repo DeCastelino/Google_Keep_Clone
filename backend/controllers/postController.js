@@ -1,4 +1,4 @@
-import { db } from "../firestore/db.js";
+const { db } = require("../firestore/db");
 
 const get_all_posts = async (req, res) => {
     await db
@@ -54,4 +54,9 @@ const upload_post = async (req, res) => {
         });
 };
 
-export { get_all_posts, get_archived_posts, get_trash_posts, upload_post };
+module.exports = {
+    get_all_posts,
+    get_archived_posts,
+    get_trash_posts,
+    upload_post,
+};

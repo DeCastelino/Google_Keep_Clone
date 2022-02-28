@@ -5,7 +5,7 @@ const Trash = () => {
     return (
         <div>
             <Navbar active={"trash"} />
-            <CardsLayout />
+            {/* <CardsLayout /> */}
         </div>
     );
 };
