@@ -107,6 +107,7 @@ const Settings = ({ open, toggleSettings }) => {
             .post("http://localhost:8000/updatePassword", passwordInfo)
             .then((res) => {
                 setLoading(false);
+                setExpanded(false);
             })
             .catch((err) => {
                 alert("Error updating password");
@@ -148,15 +149,14 @@ const Settings = ({ open, toggleSettings }) => {
                                     type="file"
                                     onChange={uploadProfilePicture}
                                 />
-                                <Button
+                                <Fab
                                     variant="contained"
                                     color="primary"
                                     size="small"
                                     component="span"
                                 >
-                                    {/* <EditOutlinedIcon /> */}
-                                    Upload
-                                </Button>
+                                    <EditOutlinedIcon />
+                                </Fab>
                             </label>
                         }
                     >

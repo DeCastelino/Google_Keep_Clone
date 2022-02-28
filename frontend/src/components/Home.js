@@ -13,7 +13,6 @@ const Home = () => {
         axios
             .get("http://localhost:8000")
             .then((res) => {
-                console.log("Notes: ", res.data);
                 setNotes(res.data);
             })
             .catch((err) => {

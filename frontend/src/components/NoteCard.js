@@ -4,6 +4,8 @@ import {
     CardActions,
     CardContent,
     CardHeader,
+    Box,
+    Chip,
     Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,6 +14,7 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
+import axios from "axios";
 
 const NoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(false);
@@ -32,11 +35,23 @@ const NoteCard = ({ note, key }) => {
         setVariant("outlined");
     };
 
+    const handleDeleteLabel = (label) => {
+        const labelInfo = { labelValue: label };
+        axios
+            .post(`http://localhost:8000/${note.id}`, labelInfo)
+            .then((result) => {
+                window.location.reload();
+            })
+            .catch(() => {
+                alert("Unable to delete label");
+            });
+    };
+
     return (
         <Card
             variant={variant}
             p={1}
-            sx={{ borderRadius: 2 }}
+            sx={{ borderRadius: 3 }}
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}
             raised
@@ -59,6 +74,16 @@ const NoteCard = ({ note, key }) => {
                 }
             />
             <CardContent>{note.body}</CardContent>
+            <Box sx={{ paddingX: 1 }}>
+                {note.labels.map((label) => (
+                    <Chip
+                        label={label}
+                        size="small"
+                        onDelete={() => handleDeleteLabel(label)}
+                        sx={{ padding: 0, marginRight: 1 }}
+                    />
+                ))}
+            </Box>
             <CardActions>
                 <Tooltip title="delete">
                     <IconButton>

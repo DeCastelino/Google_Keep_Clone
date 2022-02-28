@@ -1,4 +1,4 @@
-const { db } = require("../firestore/db");
+const { db, FieldValue } = require("../firestore/db");
 
 const get_all_posts = async (req, res) => {
     await db
@@ -43,14 +43,30 @@ const upload_post = async (req, res) => {
             bgColor: req.body.bgColor,
             labels: req.body.labels,
             pinned: req.body.pinned,
+            type: req.body.type,
             createdAt: new Date(),
             updatedAt: new Date(),
         })
         .then(() => {
-            res.send(200);
+            res.sendStatus(200);
         })
         .catch(() => {
-            res.send(500);
+            res.sendstatus(500);
+        });
+};
+
+// Deleting Note Label
+const delete_note_label = (req, res) => {
+    db.collection("posts")
+        .doc(req.params.id)
+        .update({
+            labels: FieldValue.arrayRemove(req.body.labelValue),
+        })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            res.sendStatus(404);
         });
 };
 
@@ -59,4 +75,5 @@ module.exports = {
     get_archived_posts,
     get_trash_posts,
     upload_post,
+    delete_note_label,
 };

@@ -27,4 +27,5 @@ module.exports = {
     db,
     bucket,
     uploadFile,
+    FieldValue: admin.firestore.FieldValue,
 };

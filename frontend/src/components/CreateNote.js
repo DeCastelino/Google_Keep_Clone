@@ -40,10 +40,17 @@ const CreateNote = () => {
         if (title === "" && body === "") {
             setActive(false);
         } else {
-            const notesInfo = { title, body, bgColor, labels, pinned };
+            const notesInfo = {
+                title,
+                body,
+                bgColor,
+                labels,
+                pinned,
+                type: "home",
+            };
             console.log(notesInfo);
             axios
-                .post("http://localhost:8000/uploadNote", notesInfo)
+                .post("http://localhost:8000/createNote", notesInfo)
                 .then((res) => {
                     window.location = "/home";
                 })
@@ -79,14 +86,12 @@ const CreateNote = () => {
                                         <IconButton onClick={handlePinned}>
                                             {pinned ? (
                                                 <PushPinIcon
-                                                    // color={activeColor}
                                                     sx={{ fontSize: 20 }}
                                                 />
                                             ) : (
                                                 <PushPinOutlinedIcon
                                                     sx={{
                                                         fontSize: 20,
-                                                        // color: activeColor,
                                                     }}
                                                 />
                                             )}

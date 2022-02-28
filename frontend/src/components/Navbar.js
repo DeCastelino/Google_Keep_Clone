@@ -35,6 +35,7 @@ import axios from "axios";
 import { Context } from "./Context/userContext";
 import { Dialog } from "@mui/material";
 import Settings from "./Setting";
+import LabelDropdown from "./LabelDropdown";
 
 const AccountButton = styled(Button)`
     padding: 0px 10px;
@@ -164,6 +165,7 @@ const handleRefresh = () => {
 const Navbar = (props) => {
     const { user, setUser } = useContext(Context);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [anchorElLabel, setAnchorElLabel] = useState(null);
     const [active, setActive] = useState(props.active);
     const [open, setOpen] = useState(false);
 
@@ -182,6 +184,14 @@ const Navbar = (props) => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleOpenLabelMenu = (event) => {
+        setAnchorElLabel(event.currentTarget);
+    };
+
+    const handleCloseLabelMenu = () => {
+        setAnchorElLabel(null);
     };
 
     return (
@@ -310,34 +320,54 @@ const Navbar = (props) => {
                                     </NavLink>
                                 </Tooltip>
                                 <Tooltip title="Label">
-                                    <NavLink
-                                        to="/label"
-                                        style={{
-                                            textDecoration: "none",
-                                            color: "black",
-                                        }}
-                                    >
-                                        {active === "label" ? (
-                                            <LabelIcon
-                                                sx={{
-                                                    cursor: "pointer",
-                                                    marginRight: 5,
-                                                    fontSize: 30,
-                                                    color: "#5F6368",
-                                                }}
-                                            />
-                                        ) : (
-                                            <LabelOutlinedIcon
-                                                sx={{
-                                                    cursor: "pointer",
-                                                    marginRight: 5,
-                                                    fontSize: 30,
-                                                    color: "#5F6368",
-                                                }}
-                                            />
-                                        )}
-                                    </NavLink>
+                                    {active === "label" ? (
+                                        <LabelIcon
+                                            sx={{
+                                                cursor: "pointer",
+                                                marginRight: 5,
+                                                fontSize: 30,
+                                                color: "#5F6368",
+                                            }}
+                                            onClick={handleOpenLabelMenu}
+                                        />
+                                    ) : (
+                                        <LabelOutlinedIcon
+                                            sx={{
+                                                cursor: "pointer",
+                                                marginRight: 5,
+                                                fontSize: 30,
+                                                color: "#5F6368",
+                                            }}
+                                            onClick={handleOpenLabelMenu}
+                                        />
+                                    )}
                                 </Tooltip>
+                                {/* <Menu
+                                    sx={{
+                                        mt: "45px",
+                                    }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElLabel}
+                                    anchorOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    open={Boolean(anchorElLabel)}
+                                    onClose={handleCloseLabelMenu}
+                                >
+                                    <MenuItem>Hello</MenuItem>
+                                    <MenuItem>Hello</MenuItem>
+                                    <MenuItem>Hello</MenuItem>
+                                </Menu> */}
+                                <LabelDropdown
+                                    anchorElLabel={anchorElLabel}
+                                    handleCloseLabelMenu={handleCloseLabelMenu}
+                                />
                                 <Tooltip title="Trash">
                                     <NavLink
                                         to="/trash"

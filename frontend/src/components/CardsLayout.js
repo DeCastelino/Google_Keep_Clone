@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
 // MUI Components
 import { Grid } from "@mui/material";
 
