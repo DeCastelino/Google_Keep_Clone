@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 // Custom Components
 import Navbar from "./Navbar";
 import CardsLayout from "./CardsLayout";
 import CreateNote from "./CreateNote";
-
+import { Context } from "./Context/userContext";
 const Home = () => {
+    const { user } = useContext(Context);
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
         axios
-            .get("http://localhost:8000")
+            .get(`http://localhost:8000/getHomeNotes/${user.email}`)
             .then((res) => {
                 setNotes(res.data);
             })

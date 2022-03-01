@@ -25,7 +25,6 @@ const Login = () => {
                 .post("http://localhost:8000/login", userInfo)
                 .then((res) => {
                     // store user info into localstorage
-                    console.log(res.data);
                     setUser(res.data);
                     window.location.href = "/home";
                 })

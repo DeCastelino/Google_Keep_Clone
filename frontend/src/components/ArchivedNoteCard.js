@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Card,
     CardActions,
@@ -9,7 +9,7 @@ import {
     Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
 import axios from "axios";
 
-const NoteCard = ({ note, key }) => {
+const ArchivedNoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [variant, setVariant] = useState("outlined");
     const [activeColor, setActiveColor] = useState("#ffffff"); // white
@@ -30,7 +30,7 @@ const NoteCard = ({ note, key }) => {
                 pinned: !pinned,
             })
             .then((res) => {
-                setPinned(!pinned);
+                window.location.reload();
             })
             .catch((err) => {
                 alert("Error in pinning note");
@@ -70,14 +70,14 @@ const NoteCard = ({ note, key }) => {
             });
     };
 
-    const handleArchiveNote = () => {
+    const handleUnarchiveNote = () => {
         axios
-            .post("http://localhost:8000/archiveNote", { id: note.id })
+            .post("http://localhost:8000/unarchiveNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })
             .catch(() => {
-                alert("Unable to archive note");
+                alert("Unable to unarchive note");
             });
     };
 
@@ -122,14 +122,14 @@ const NoteCard = ({ note, key }) => {
                 <Tooltip title="delete">
                     <IconButton onClick={handleDeleteNote}>
                         <DeleteIcon
-                            // variant="outlined"
+                            variant="outlined"
                             sx={{ fontSize: 20, color: activeColor }}
                         />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="archive">
-                    <IconButton onClick={handleArchiveNote}>
-                        <ArchiveIcon
+                <Tooltip title="unarchive">
+                    <IconButton onClick={handleUnarchiveNote}>
+                        <UnarchiveIcon
                             sx={{ fontSize: 20, color: activeColor }}
                         />
                     </IconButton>
@@ -151,4 +151,4 @@ const NoteCard = ({ note, key }) => {
     );
 };
 
-export default NoteCard;
+export default ArchivedNoteCard;

@@ -1,4 +1,10 @@
-import { useState } from "react";
+// React Components
+import { useContext, useState } from "react";
+
+// NPM Components
+import axios from "axios";
+
+// MUI Components
 import {
     Box,
     Card,
@@ -12,13 +18,16 @@ import {
     ClickAwayListener,
     CardHeader,
 } from "@mui/material";
+
+// MUI Button Components
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import LabelIcon from "@mui/icons-material/Label";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
-import axios from "axios";
+import { Context } from "./Context/userContext";
+
 const CreateNote = () => {
     const [active, setActive] = useState(false);
     const [title, setTitle] = useState("");
@@ -26,6 +35,7 @@ const CreateNote = () => {
     const [bgColor, setBgColor] = useState("#ffffff"); // white
     const [labels, setLabels] = useState([]);
     const [pinned, setPinned] = useState(false);
+    const { user } = useContext(Context);
 
     const handleCreateNote = () => {
         setActive(true);
@@ -41,6 +51,7 @@ const CreateNote = () => {
             setActive(false);
         } else {
             const notesInfo = {
+                email: user.email,
                 title,
                 body,
                 bgColor,

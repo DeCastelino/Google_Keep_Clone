@@ -342,28 +342,6 @@ const Navbar = (props) => {
                                         />
                                     )}
                                 </Tooltip>
-                                {/* <Menu
-                                    sx={{
-                                        mt: "45px",
-                                    }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElLabel}
-                                    anchorOrigin={{
-                                        vertical: "top",
-                                        horizontal: "right",
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "right",
-                                    }}
-                                    open={Boolean(anchorElLabel)}
-                                    onClose={handleCloseLabelMenu}
-                                >
-                                    <MenuItem>Hello</MenuItem>
-                                    <MenuItem>Hello</MenuItem>
-                                    <MenuItem>Hello</MenuItem>
-                                </Menu> */}
                                 <LabelDropdown
                                     anchorElLabel={anchorElLabel}
                                     handleCloseLabelMenu={handleCloseLabelMenu}

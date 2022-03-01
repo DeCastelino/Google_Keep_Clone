@@ -10,14 +10,22 @@ const user_register = async (req, res) => {
     if (!user.empty) res.sendStatus(404);
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(req.body.password, salt);
-    db.collection("users").add({
-        firstname: req.body.firstname,
-        surname: req.body.surname,
-        email: req.body.email,
-        password: hashedPass,
-        profilePicture:
-            "https://storage.googleapis.com/keep_note_bucket/profile_image.png",
-    });
+    db.collection("users")
+        .add({
+            firstname: req.body.firstname,
+            surname: req.body.surname,
+            email: req.body.email,
+            password: hashedPass,
+            profilePicture:
+                "https://storage.googleapis.com/keep_note_bucket/profile_image.png",
+        })
+        .then(() => {
+            // Create a label collection of the new user
+            db.collection("labels").add({
+                userEmail: req.body.email,
+            });
+        });
+
     res.sendStatus(200);
 };
 
