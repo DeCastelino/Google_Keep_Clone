@@ -1,5 +1,8 @@
+// React Components
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+
+// NPM Components
 import axios from "axios";
 
 // MUI Components
@@ -7,6 +10,7 @@ import { Box, Card, Grid, TextField, Typography, Button } from "@mui/material";
 
 // Images
 import StarlitValley from "../assets/images/StarlitValley.png";
+
 const Signup = () => {
     const [firstname, setFirstname] = useState("");
     const [surname, setSurname] = useState("");
@@ -14,6 +18,7 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
 
+    // Registering New User
     const handleSubmit = () => {
         if (
             firstname === "" ||

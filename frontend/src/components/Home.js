@@ -1,4 +1,7 @@
+// React Components
 import { useState, useEffect, useContext } from "react";
+
+// NPM Components
 import axios from "axios";
 
 // Custom Components
@@ -6,6 +9,7 @@ import Navbar from "./Navbar";
 import CardsLayout from "./CardsLayout";
 import CreateNote from "./CreateNote";
 import { Context } from "./Context/userContext";
+
 const Home = () => {
     const { user } = useContext(Context);
     const [notes, setNotes] = useState([]);

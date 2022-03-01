@@ -1,24 +1,7 @@
-// React Components
-import { useEffect, useState } from "react";
-import axios from "axios";
-
 // MUI Components
 import { Menu, MenuItem } from "@mui/material";
 
 const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
-    const [labels, setLabels] = useState([]);
-
-    // useEffect(() => {
-    //     axios
-    //         .get("http://localhost:8000/getLabels")
-    //         .then((result) => {
-    //             setLabels(result.data);
-    //         })
-    //         .catch((error) => {
-    //             alert("Unable to fetch labels");
-    //         });
-    // }, []);
-
     return (
         <Menu
             sx={{

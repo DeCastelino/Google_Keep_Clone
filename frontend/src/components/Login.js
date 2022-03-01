@@ -1,6 +1,12 @@
+// React Components
 import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+
+// NPM Components
 import axios from "axios";
+
+// Custom Components
+import { Context } from "./Context/userContext";
 
 // MUI Components
 import { Grid, Box, TextField, Button, Typography } from "@mui/material";
@@ -8,15 +14,13 @@ import { Grid, Box, TextField, Button, Typography } from "@mui/material";
 // Images
 import Ghost from "../assets/images/Ghosts.jpg";
 
-// Custom Components
-import { Context } from "./Context/userContext";
-
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
-    const { user, setUser } = useContext(Context);
+    const { setUser } = useContext(Context);
 
+    // Logging In
     const handleSubmit = () => {
         if (email === "" || password === "") setError(true);
         else {

@@ -1,4 +1,10 @@
-import { useState, useEffect } from "react";
+// React Components
+import { useState } from "react";
+
+// NPM Components
+import axios from "axios";
+
+// MUI Components
 import {
     Card,
     CardActions,
@@ -8,6 +14,8 @@ import {
     Chip,
     Tooltip,
 } from "@mui/material";
+
+// MUI Icons Components
 import DeleteIcon from "@mui/icons-material/Delete";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
@@ -15,14 +23,13 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
-import axios from "axios";
 
 const ArchivedNoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [variant, setVariant] = useState("outlined");
     const [activeColor, setActiveColor] = useState("#ffffff"); // white
 
-    // toggling pin
+    // Pinned notes are transferred to Pinned Notes section in Home tab.
     const handlePinned = () => {
         axios
             .post("http://localhost:8000/updatePinned", {
@@ -37,15 +44,19 @@ const ArchivedNoteCard = ({ note, key }) => {
             });
     };
 
+    // highlights the note card when mouse is over it
     const onMouseOver = () => {
         setActiveColor("iconColorActive");
         setVariant("elevation");
     };
+
+    // removes the highlight when mouse is out of it
     const onMouseOut = () => {
         setActiveColor("#ffffff"); // white
         setVariant("outlined");
     };
 
+    // Delete the selected Label from the note
     const handleDeleteLabel = (label) => {
         axios
             .post(`http://localhost:8000/deleteLabel/${note.id}`, {
@@ -59,6 +70,7 @@ const ArchivedNoteCard = ({ note, key }) => {
             });
     };
 
+    // Delete the selected note
     const handleDeleteNote = () => {
         axios
             .post("http://localhost:8000/deleteNote", { id: note.id })
@@ -70,6 +82,7 @@ const ArchivedNoteCard = ({ note, key }) => {
             });
     };
 
+    // Unarchive the selected note
     const handleUnarchiveNote = () => {
         axios
             .post("http://localhost:8000/unarchiveNote", { id: note.id })

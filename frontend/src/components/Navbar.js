@@ -1,41 +1,46 @@
-import * as React from "react";
-import { useState, useEffect, useContext } from "react";
-import { styled } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import InputBase from "@mui/material/InputBase";
-import CssBaseline from "@mui/material/CssBaseline";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
+// React Components
+import { Fragment, cloneElement, useState, useContext } from "react";
+import { NavLink } from "react-router-dom";
+
+// Custom Components
+import { Context } from "./Context/userContext";
+import Settings from "./Setting";
+import LabelDropdown from "./LabelDropdown";
+
+// MUI Components
+import {
+    AppBar,
+    Toolbar,
+    Box,
+    Typography,
+    Container,
+    InputBase,
+    CssBaseline,
+    useScrollTrigger,
+    Zoom,
+    Fab,
+    Divider,
+    Button,
+    IconButton,
+    Avatar,
+    Tooltip,
+    Menu,
+    styled,
+} from "@mui/material";
 import PropTypes from "prop-types";
-import Zoom from "@mui/material/Zoom";
-import Fab from "@mui/material/Fab";
+
+// MUI Icons Components
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import HomeIcon from "@mui/icons-material/Home";
 import LabelIcon from "@mui/icons-material/Label";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { NavLink } from "react-router-dom";
-import axios from "axios";
-import { Context } from "./Context/userContext";
-import { Dialog } from "@mui/material";
-import Settings from "./Setting";
-import LabelDropdown from "./LabelDropdown";
 
 const AccountButton = styled(Button)`
     padding: 0px 10px;
@@ -104,7 +109,7 @@ function ElevationScroll(props) {
         target: window ? window() : undefined,
     });
 
-    return React.cloneElement(children, {
+    return cloneElement(children, {
         elevation: elevationScrollTrigger ? 4 : 0,
     });
 }
@@ -195,7 +200,7 @@ const Navbar = (props) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar
@@ -474,7 +479,7 @@ const Navbar = (props) => {
                     <KeyboardArrowUpIcon />
                 </Fab>
             </ScrollTop>
-        </React.Fragment>
+        </Fragment>
     );
 };
 export default Navbar;

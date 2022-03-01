@@ -1,4 +1,10 @@
+// React Components
 import { useState } from "react";
+
+// NPM Components
+import axios from "axios";
+
+// MUI Components
 import {
     Card,
     CardActions,
@@ -8,28 +14,29 @@ import {
     Chip,
     Tooltip,
 } from "@mui/material";
+
+// MUI Icons Components
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
-import PushPinIcon from "@mui/icons-material/PushPin";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
-import LabelIcon from "@mui/icons-material/Label";
-import axios from "axios";
 
 const TrashNoteCard = ({ note, key }) => {
     const [variant, setVariant] = useState("outlined");
     const [activeColor, setActiveColor] = useState("#ffffff"); // white
 
+    // highlights the note card when mouse is over it
     const onMouseOver = () => {
         setActiveColor("iconColorActive");
         setVariant("elevation");
     };
+
+    // removes the highlight when mouse is out of it
     const onMouseOut = () => {
         setActiveColor("#ffffff"); // white
         setVariant("outlined");
     };
 
+    // Permanantly delete the selected note
     const handleDeleteNote = () => {
         axios
             .post("http://localhost:8000/deleteNoteForever", { id: note.id })
@@ -41,6 +48,7 @@ const TrashNoteCard = ({ note, key }) => {
             });
     };
 
+    // Restore the selected note
     const handleRestoreNote = () => {
         axios
             .post("http://localhost:8000/restoreNote", { id: note.id })

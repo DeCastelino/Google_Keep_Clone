@@ -1,8 +1,6 @@
+// React Components
 import { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// MUI components
-import { createTheme, ThemeProvider } from "@material-ui/core";
 
 // Custom Components
 import Home from "./components/Home";
@@ -11,6 +9,9 @@ import Signup from "./components/Signup";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
 import { Context } from "./components/Context/userContext";
+
+// MUI components
+import { createTheme, ThemeProvider } from "@material-ui/core";
 
 const theme = createTheme({
     palette: {

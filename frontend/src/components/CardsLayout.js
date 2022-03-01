@@ -1,10 +1,10 @@
-// MUI Components
-import { Grid } from "@mui/material";
-
 // Custom Components
 import NoteCard from "./NoteCard";
 import ArchivedNoteCard from "./ArchivedNoteCard";
 import TrashNoteCard from "./TrashNoteCard";
+
+// MUI Components
+import { Grid } from "@mui/material";
 
 const CardsLayout = ({ notes }) => {
     return (

@@ -8,6 +8,8 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import CardsLayout from "./CardsLayout";
 import { Context } from "./Context/userContext";
+
+// MUI Components
 import { Box, Typography } from "@mui/material";
 
 // MUI Icons Component
@@ -17,6 +19,7 @@ const Archive = () => {
     const { user } = useContext(Context);
     const [notes, setNotes] = useState([]);
 
+    // Fetching Archived Notes
     useEffect(() => {
         axios
             .get(`http://localhost:8000/getArchivedNotes/${user.email}`)
@@ -43,7 +46,6 @@ const Archive = () => {
                     }}
                 >
                     <ArchiveOutlinedIcon
-                        // color="lightgrey"
                         sx={{ height: 150, width: 150, color: "lightgrey" }}
                     />
                     <Typography pt={3} variant="h4" color="gray">

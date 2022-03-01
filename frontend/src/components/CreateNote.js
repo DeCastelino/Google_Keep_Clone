@@ -4,6 +4,9 @@ import { useContext, useState } from "react";
 // NPM Components
 import axios from "axios";
 
+// Custom Components
+import { Context } from "./Context/userContext";
+
 // MUI Components
 import {
     Box,
@@ -26,7 +29,6 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import LabelIcon from "@mui/icons-material/Label";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
-import { Context } from "./Context/userContext";
 
 const CreateNote = () => {
     const [active, setActive] = useState(false);
@@ -46,6 +48,7 @@ const CreateNote = () => {
         setPinned(!pinned);
     };
 
+    // Saving note to database
     const handleClose = () => {
         if (title === "" && body === "") {
             setActive(false);
@@ -181,7 +184,7 @@ const CreateNote = () => {
                                         variant="text"
                                         onClick={handleClose}
                                         sx={{
-                                            color: "gray", // Align Button to right
+                                            color: "gray", // TODO: Align Button to right
                                         }}
                                     >
                                         Close

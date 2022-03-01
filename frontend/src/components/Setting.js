@@ -1,4 +1,13 @@
+// React Components
 import { useState, useContext } from "react";
+
+// NPM Components
+import axios from "axios";
+
+// Custom Components
+import { Context } from "./Context/userContext";
+
+// MUI Components
 import {
     styled,
     Dialog,
@@ -18,10 +27,6 @@ import {
 // MUI Icons
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-
-// Custom Components
-import { Context } from "./Context/userContext";
-import axios from "axios";
 
 const AccountButton = styled(Button)`
     border-color: lightgray;
@@ -53,6 +58,7 @@ const Settings = ({ open, toggleSettings }) => {
         setExpanded(isExpanded ? panel : false);
     };
 
+    // Upload profile picture
     const uploadProfilePicture = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
@@ -66,6 +72,7 @@ const Settings = ({ open, toggleSettings }) => {
         });
     };
 
+    // Update user's name
     const updateName = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -83,6 +90,7 @@ const Settings = ({ open, toggleSettings }) => {
             });
     };
 
+    // Update user's email
     const updateEmail = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -99,6 +107,7 @@ const Settings = ({ open, toggleSettings }) => {
             });
     };
 
+    // Update user's password
     const updatePassword = (e) => {
         e.preventDefault();
         setLoading(true);
