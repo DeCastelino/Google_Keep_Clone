@@ -226,6 +226,25 @@ const update_pinned = (req, res) => {
         });
 };
 
+const update_note = (req, res) => {
+    db.collection("posts")
+        .doc(req.body.id)
+        .update({
+            title: req.body.title,
+            body: req.body.body,
+            bgColor: req.body.bgColor,
+            labels: req.body.labels,
+            pinned: req.body.pinned,
+        })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.sendStatus(404);
+        });
+};
+
 module.exports = {
     get_home_notes,
     get_all_labels,
@@ -239,4 +258,5 @@ module.exports = {
     restore_note,
     unarchive_note,
     update_pinned,
+    update_note,
 };

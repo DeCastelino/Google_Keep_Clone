@@ -13,6 +13,7 @@ import {
     Box,
     Chip,
     Tooltip,
+    Slide,
 } from "@mui/material";
 
 // MUI Icons Components
@@ -61,42 +62,44 @@ const TrashNoteCard = ({ note, key }) => {
     };
 
     return (
-        <Card
-            variant={variant}
-            p={1}
-            sx={{ borderRadius: 3 }}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-            raised
-        >
-            <CardHeader title={note.title} />
-            <CardContent>{note.body}</CardContent>
-            <Box sx={{ paddingX: 1 }}>
-                {note.labels.map((label) => (
-                    <Chip
-                        label={label}
-                        size="small"
-                        sx={{ padding: 0, marginRight: 1 }}
-                    />
-                ))}
-            </Box>
-            <CardActions>
-                <Tooltip title="delete forever">
-                    <IconButton onClick={handleDeleteNote}>
-                        <DeleteForeverIcon
-                            sx={{ fontSize: 20, color: activeColor }}
+        <Slide direction="up" in timeout={200}>
+            <Card
+                variant={variant}
+                p={1}
+                sx={{ borderRadius: 3 }}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+                raised
+            >
+                <CardHeader title={note.title} />
+                <CardContent>{note.body}</CardContent>
+                <Box sx={{ paddingX: 1 }}>
+                    {note.labels.map((label) => (
+                        <Chip
+                            label={label}
+                            size="small"
+                            sx={{ padding: 0, marginRight: 1 }}
                         />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="restore">
-                    <IconButton onClick={handleRestoreNote}>
-                        <RestoreFromTrashIcon
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-            </CardActions>
-        </Card>
+                    ))}
+                </Box>
+                <CardActions>
+                    <Tooltip title="delete forever">
+                        <IconButton onClick={handleDeleteNote}>
+                            <DeleteForeverIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="restore">
+                        <IconButton onClick={handleRestoreNote}>
+                            <RestoreFromTrashIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                </CardActions>
+            </Card>
+        </Slide>
     );
 };
 

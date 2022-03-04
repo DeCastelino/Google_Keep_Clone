@@ -13,6 +13,11 @@ import {
     Box,
     Chip,
     Tooltip,
+    Slide,
+    Dialog,
+    Button,
+    TextField,
+    ClickAwayListener,
 } from "@mui/material";
 
 // MUI Icons Components
@@ -24,10 +29,22 @@ import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
 
+function showCoords(event) {
+    const x = event.clientX;
+    const y = event.clientY;
+    console.log(`Coords: ${x}, ${y}`);
+}
+
 const NoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
+    const [open, setOpen] = useState(false);
+    const [display, setDisplay] = useState("block");
     const [variant, setVariant] = useState("outlined");
     const [activeColor, setActiveColor] = useState("#ffffff"); // white
+    const [title, setTitle] = useState(note.title);
+    const [body, setBody] = useState(note.body);
+    const [bgColor, setBgColor] = useState(note.bgColor);
+    const [labels, setLabels] = useState(note.labels);
 
     // Toggling Pin
     const handlePinned = () => {
@@ -45,7 +62,8 @@ const NoteCard = ({ note, key }) => {
     };
 
     // highlights the note card when mouse is over it
-    const onMouseOver = () => {
+    const onMouseOver = (event) => {
+        showCoords(event);
         setActiveColor("iconColorActive");
         setVariant("elevation");
     };
@@ -94,70 +112,215 @@ const NoteCard = ({ note, key }) => {
             });
     };
 
+    const handleEditNote = () => {
+        // Transform the note to make it editable
+        setOpen(true);
+        setDisplay("none");
+    };
+
+    const handleClose = () => {
+        console.log("Inside Handle Close");
+        const notesInfo = {
+            id: note.id,
+            title,
+            body,
+            bgColor,
+            labels,
+            pinned,
+        };
+        axios
+            .post("http://localhost:8000/updateNote", notesInfo)
+            .then((res) => {
+                setOpen(false);
+                setDisplay("block");
+                window.location.reload();
+            })
+            .catch((err) => {
+                alert("Error in updating note");
+            });
+    };
+
     return (
-        <Card
-            variant={variant}
-            p={1}
-            sx={{ borderRadius: 3 }}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-            raised
-        >
-            <CardHeader
-                title={note.title}
-                action={
-                    <IconButton onClick={handlePinned}>
-                        {pinned ? (
-                            <PushPinIcon
-                                color={activeColor}
-                                sx={{ fontSize: 20 }}
-                            />
-                        ) : (
-                            <PushPinOutlinedIcon
+        <>
+            <Card
+                variant={variant}
+                p={1}
+                sx={{ borderRadius: 3, display: display }}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+                onClick={handleEditNote}
+                raised
+            >
+                <CardHeader
+                    title={note.title}
+                    action={
+                        <IconButton onClick={handlePinned}>
+                            {pinned ? (
+                                <PushPinIcon
+                                    color={activeColor}
+                                    sx={{ fontSize: 20 }}
+                                />
+                            ) : (
+                                <PushPinOutlinedIcon
+                                    sx={{
+                                        fontSize: 20,
+                                        color: activeColor,
+                                    }}
+                                />
+                            )}
+                        </IconButton>
+                    }
+                />
+                <CardContent>{note.body}</CardContent>
+                <Box sx={{ paddingX: 1 }}>
+                    {note.labels.map((label) => (
+                        <Chip
+                            label={label}
+                            size="small"
+                            onDelete={() => handleDeleteLabel(label)}
+                            sx={{ padding: 0, marginRight: 1 }}
+                        />
+                    ))}
+                </Box>
+                <CardActions>
+                    <Tooltip title="delete">
+                        <IconButton onClick={handleDeleteNote}>
+                            <DeleteIcon
                                 sx={{ fontSize: 20, color: activeColor }}
                             />
-                        )}
-                    </IconButton>
-                }
-            />
-            <CardContent>{note.body}</CardContent>
-            <Box sx={{ paddingX: 1 }}>
-                {note.labels.map((label) => (
-                    <Chip
-                        label={label}
-                        size="small"
-                        onDelete={() => handleDeleteLabel(label)}
-                        sx={{ padding: 0, marginRight: 1 }}
-                    />
-                ))}
-            </Box>
-            <CardActions>
-                <Tooltip title="delete">
-                    <IconButton onClick={handleDeleteNote}>
-                        <DeleteIcon sx={{ fontSize: 20, color: activeColor }} />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="archive">
-                    <IconButton onClick={handleArchiveNote}>
-                        <ArchiveIcon
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="background color">
-                    <IconButton>
-                        <ColorLensIcon
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="label">
-                    <IconButton>
-                        <LabelIcon sx={{ fontSize: 20, color: activeColor }} />
-                    </IconButton>
-                </Tooltip>
-            </CardActions>
-        </Card>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="archive">
+                        <IconButton onClick={handleArchiveNote}>
+                            <ArchiveIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="background color">
+                        <IconButton>
+                            <ColorLensIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="label">
+                        <IconButton>
+                            <LabelIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                </CardActions>
+            </Card>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                fullWidth
+                sx={{ height: "60vh" }}
+            >
+                <ClickAwayListener onClickAway={handleClose}>
+                    <Card>
+                        <Box p={2} pb={0} sx={{ position: "relative" }}>
+                            <CardHeader
+                                action={
+                                    <IconButton onClick={handlePinned}>
+                                        {pinned ? (
+                                            <PushPinIcon
+                                                sx={{ fontSize: 20 }}
+                                            />
+                                        ) : (
+                                            <PushPinOutlinedIcon
+                                                sx={{
+                                                    fontSize: 20,
+                                                }}
+                                            />
+                                        )}
+                                    </IconButton>
+                                }
+                                sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                }}
+                            />
+                            <TextField
+                                variant="standard"
+                                placeholder="Title"
+                                multiline
+                                size="small"
+                                value={title}
+                                InputProps={{ disableUnderline: true }}
+                                sx={{ paddingBottom: 2, width: "90%" }}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <TextField
+                                variant="standard"
+                                placeholder="Take a note..."
+                                fullWidth
+                                multiline
+                                value={body}
+                                InputProps={{ disableUnderline: true }}
+                                sx={{ paddingBottom: 2 }}
+                                onChange={(e) => setBody(e.target.value)}
+                            />
+                            <CardActions
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                }}
+                            >
+                                <Tooltip title="delete">
+                                    <IconButton>
+                                        <DeleteIcon
+                                            sx={{
+                                                fontSize: 20,
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="archive">
+                                    <IconButton>
+                                        <ArchiveIcon
+                                            sx={{
+                                                fontSize: 20,
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="background color">
+                                    <IconButton>
+                                        <ColorLensIcon
+                                            sx={{
+                                                fontSize: 20,
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="labels">
+                                    <IconButton>
+                                        <LabelIcon
+                                            sx={{
+                                                fontSize: 20,
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                                <Button
+                                    variant="text"
+                                    onClick={handleClose}
+                                    sx={{
+                                        color: "gray", // TODO: Align Button to right
+                                    }}
+                                >
+                                    Close
+                                </Button>
+                            </CardActions>
+                        </Box>
+                    </Card>
+                </ClickAwayListener>
+            </Dialog>
+        </>
     );
 };
 

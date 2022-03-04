@@ -62,7 +62,6 @@ const CreateNote = () => {
                 pinned,
                 type: "home",
             };
-            console.log(notesInfo);
             axios
                 .post("http://localhost:8000/createNote", notesInfo)
                 .then((res) => {

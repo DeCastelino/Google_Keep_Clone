@@ -13,6 +13,7 @@ import {
     Box,
     Chip,
     Tooltip,
+    Slide,
 } from "@mui/material";
 
 // MUI Icons Components
@@ -95,72 +96,76 @@ const ArchivedNoteCard = ({ note, key }) => {
     };
 
     return (
-        <Card
-            variant={variant}
-            p={1}
-            sx={{ borderRadius: 3 }}
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-            raised
-        >
-            <CardHeader
-                title={note.title}
-                action={
-                    <IconButton onClick={handlePinned}>
-                        {pinned ? (
-                            <PushPinIcon
-                                color={activeColor}
-                                sx={{ fontSize: 20 }}
-                            />
-                        ) : (
-                            <PushPinOutlinedIcon
+        <Slide direction="up" in timeout={200}>
+            <Card
+                variant={variant}
+                p={1}
+                sx={{ borderRadius: 3 }}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+                raised
+            >
+                <CardHeader
+                    title={note.title}
+                    action={
+                        <IconButton onClick={handlePinned}>
+                            {pinned ? (
+                                <PushPinIcon
+                                    color={activeColor}
+                                    sx={{ fontSize: 20 }}
+                                />
+                            ) : (
+                                <PushPinOutlinedIcon
+                                    sx={{ fontSize: 20, color: activeColor }}
+                                />
+                            )}
+                        </IconButton>
+                    }
+                />
+                <CardContent>{note.body}</CardContent>
+                <Box sx={{ paddingX: 1 }}>
+                    {note.labels.map((label) => (
+                        <Chip
+                            label={label}
+                            size="small"
+                            onDelete={() => handleDeleteLabel(label)}
+                            sx={{ padding: 0, marginRight: 1 }}
+                        />
+                    ))}
+                </Box>
+                <CardActions>
+                    <Tooltip title="delete">
+                        <IconButton onClick={handleDeleteNote}>
+                            <DeleteIcon
+                                variant="outlined"
                                 sx={{ fontSize: 20, color: activeColor }}
                             />
-                        )}
-                    </IconButton>
-                }
-            />
-            <CardContent>{note.body}</CardContent>
-            <Box sx={{ paddingX: 1 }}>
-                {note.labels.map((label) => (
-                    <Chip
-                        label={label}
-                        size="small"
-                        onDelete={() => handleDeleteLabel(label)}
-                        sx={{ padding: 0, marginRight: 1 }}
-                    />
-                ))}
-            </Box>
-            <CardActions>
-                <Tooltip title="delete">
-                    <IconButton onClick={handleDeleteNote}>
-                        <DeleteIcon
-                            variant="outlined"
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="unarchive">
-                    <IconButton onClick={handleUnarchiveNote}>
-                        <UnarchiveIcon
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="background color">
-                    <IconButton>
-                        <ColorLensIcon
-                            sx={{ fontSize: 20, color: activeColor }}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="label">
-                    <IconButton>
-                        <LabelIcon sx={{ fontSize: 20, color: activeColor }} />
-                    </IconButton>
-                </Tooltip>
-            </CardActions>
-        </Card>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="unarchive">
+                        <IconButton onClick={handleUnarchiveNote}>
+                            <UnarchiveIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="background color">
+                        <IconButton>
+                            <ColorLensIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="label">
+                        <IconButton>
+                            <LabelIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                </CardActions>
+            </Card>
+        </Slide>
     );
 };
 

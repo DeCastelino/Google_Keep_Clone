@@ -23,6 +23,7 @@ router.post("/unarchiveNote", postController.unarchive_note);
 router.post("/updatePinned", postController.update_pinned);
 router.post("/deleteNoteForever", postController.delete_note_forever);
 router.post("/restoreNote", postController.restore_note);
+router.post("/updateNote", postController.update_note);
 
 // DELETE ROUTES
 router.post("/deleteLabel/:id", postController.delete_note_label);
