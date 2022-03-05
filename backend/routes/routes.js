@@ -5,7 +5,7 @@ const { upload } = require("../middleware/multer");
 const router = express.Router();
 
 // GET ROUTES
-router.get("/getLabels", postController.get_all_labels);
+router.get("/getLabels/:email", postController.get_all_labels);
 router.get("/getHomeNotes/:email", postController.get_home_notes);
 router.get("/getArchivedNotes/:email", postController.get_archived_notes);
 router.get("/getDeletedNotes/:email", postController.get_trash_notes);
@@ -24,6 +24,7 @@ router.post("/updatePinned", postController.update_pinned);
 router.post("/deleteNoteForever", postController.delete_note_forever);
 router.post("/restoreNote", postController.restore_note);
 router.post("/updateNote", postController.update_note);
+router.post("/updateLabel", postController.update_label);
 
 // DELETE ROUTES
 router.post("/deleteLabel/:id", postController.delete_note_label);

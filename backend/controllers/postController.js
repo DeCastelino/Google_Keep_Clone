@@ -165,15 +165,12 @@ const restore_note = (req, res) => {
 
 const get_all_labels = (req, res) => {
     db.collection("labels")
-        .where("email", "==", req.body.email)
+        .where("email", "==", req.params.email)
         .get()
         .then((snapshot) => {
-            let labels = [];
+            let labels = null;
             snapshot.forEach((doc) => {
-                labels.push({
-                    id: doc.id,
-                    labels: doc.data().labels,
-                });
+                labels = doc.data().labels;
             });
             res.status(200).json(labels);
         })
@@ -245,6 +242,23 @@ const update_note = (req, res) => {
         });
 };
 
+const update_label = (req, res) => {
+    console.log("ID: ", req.body.id);
+    console.log("labels: ", req.body.labels);
+    db.collection("posts")
+        .doc(req.body.id)
+        .update({
+            labels: req.body.labels,
+        })
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.sendStatus(404);
+        });
+};
+
 module.exports = {
     get_home_notes,
     get_all_labels,
@@ -259,4 +273,5 @@ module.exports = {
     unarchive_note,
     update_pinned,
     update_note,
+    update_label,
 };

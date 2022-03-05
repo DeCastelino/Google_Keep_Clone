@@ -13,11 +13,16 @@ import {
     Box,
     Chip,
     Tooltip,
-    Slide,
     Dialog,
     Button,
     TextField,
     ClickAwayListener,
+    MenuItem,
+    Checkbox,
+    Menu,
+    MenuList,
+    Input,
+    InputAdornment,
 } from "@mui/material";
 
 // MUI Icons Components
@@ -28,6 +33,7 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
+import SearchIcon from "@mui/icons-material/Search";
 
 function showCoords(event) {
     const x = event.clientX;
@@ -35,7 +41,7 @@ function showCoords(event) {
     console.log(`Coords: ${x}, ${y}`);
 }
 
-const NoteCard = ({ note, key }) => {
+const NoteCard = ({ note, labels, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [open, setOpen] = useState(false);
     const [display, setDisplay] = useState("block");
@@ -44,7 +50,11 @@ const NoteCard = ({ note, key }) => {
     const [title, setTitle] = useState(note.title);
     const [body, setBody] = useState(note.body);
     const [bgColor, setBgColor] = useState(note.bgColor);
-    const [labels, setLabels] = useState(note.labels);
+    const [activeLabels, setActiveLabels] = useState(note.labels);
+    const [labelList, setLabelList] = useState(labels);
+    const [openLabelMenu, setopenLabelMenu] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [labelSelect, setLabelSelect] = useState("");
 
     // Toggling Pin
     const handlePinned = () => {
@@ -119,13 +129,11 @@ const NoteCard = ({ note, key }) => {
     };
 
     const handleClose = () => {
-        console.log("Inside Handle Close");
         const notesInfo = {
             id: note.id,
             title,
             body,
             bgColor,
-            labels,
             pinned,
         };
         axios
@@ -140,6 +148,39 @@ const NoteCard = ({ note, key }) => {
             });
     };
 
+    const handleOpenLabelMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+        setopenLabelMenu((prev) => !prev);
+    };
+
+    const handleCloseLabelMenu = () => {
+        setAnchorEl(null);
+        setopenLabelMenu(false);
+    };
+
+    const updateLabel = (label) => {
+        return (event) => {
+            let labels = [];
+            if (event.target.checked) {
+                labels = [...activeLabels, label];
+            }
+            if (!event.target.checked) {
+                labels = activeLabels.filter((l) => l !== label);
+            }
+            axios
+                .post(`http://localhost:8000/updateLabel`, {
+                    labels,
+                    id: note.id,
+                })
+                .then(() => {
+                    setActiveLabels(labels);
+                })
+                .catch(() => {
+                    alert("Error in adding label");
+                });
+        };
+    };
+
     return (
         <>
             <Card
@@ -148,11 +189,10 @@ const NoteCard = ({ note, key }) => {
                 sx={{ borderRadius: 3, display: display }}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
-                onClick={handleEditNote}
                 raised
             >
                 <CardHeader
-                    title={note.title}
+                    title={title}
                     action={
                         <IconButton onClick={handlePinned}>
                             {pinned ? (
@@ -170,10 +210,11 @@ const NoteCard = ({ note, key }) => {
                             )}
                         </IconButton>
                     }
+                    onClick={handleEditNote}
                 />
-                <CardContent>{note.body}</CardContent>
+                <CardContent onClick={handleEditNote}>{body}</CardContent>
                 <Box sx={{ paddingX: 1 }}>
-                    {note.labels.map((label) => (
+                    {activeLabels.map((label) => (
                         <Chip
                             label={label}
                             size="small"
@@ -205,12 +246,51 @@ const NoteCard = ({ note, key }) => {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="label">
-                        <IconButton>
+                        <IconButton onClick={handleOpenLabelMenu}>
                             <LabelIcon
                                 sx={{ fontSize: 20, color: activeColor }}
                             />
                         </IconButton>
                     </Tooltip>
+                    <Menu
+                        open={openLabelMenu}
+                        anchorEl={anchorEl}
+                        onClose={handleCloseLabelMenu}
+                        sx={{ padding: 0, margin: 0 }}
+                    >
+                        <Input
+                            placeholder="Search Label"
+                            value={labelSelect}
+                            onChange={(e) => setLabelSelect(e.target.value)}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            }
+                            sx={{ marginX: 1 }}
+                        />
+                        <MenuList>
+                            {labelList
+                                .filter((label) => label.includes(labelSelect))
+                                .map((label) => (
+                                    <MenuItem sx={{ padding: 0, margin: 0 }}>
+                                        {note.labels.includes(label) ? (
+                                            <Checkbox
+                                                size="small"
+                                                checked
+                                                onChange={updateLabel(label)}
+                                            />
+                                        ) : (
+                                            <Checkbox
+                                                size="small"
+                                                onChange={updateLabel(label)}
+                                            />
+                                        )}
+                                        {label}
+                                    </MenuItem>
+                                ))}
+                        </MenuList>
+                    </Menu>
                 </CardActions>
             </Card>
             <Dialog

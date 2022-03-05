@@ -13,6 +13,7 @@ import { Context } from "./Context/userContext";
 const Home = () => {
     const { user } = useContext(Context);
     const [notes, setNotes] = useState([]);
+    const [labels, setLabels] = useState([]);
 
     useEffect(() => {
         axios
@@ -23,13 +24,21 @@ const Home = () => {
             .catch((err) => {
                 alert("Error in fetching notes");
             });
+        axios
+            .get(`http://localhost:8000/getLabels/${user.email}`)
+            .then((res) => {
+                setLabels(res.data);
+            })
+            .catch((err) => {
+                alert("Unable to fetch labels");
+            });
     }, []);
 
     return (
         <div>
             <Navbar active={"home"} />
             <CreateNote />
-            <CardsLayout notes={notes} />
+            <CardsLayout notes={notes} labels={labels} />
         </div>
     );
 };
