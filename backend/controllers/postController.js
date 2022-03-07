@@ -168,7 +168,7 @@ const get_all_labels = (req, res) => {
         .where("email", "==", req.params.email)
         .get()
         .then((snapshot) => {
-            let labels = null;
+            let labels = [];
             snapshot.forEach((doc) => {
                 labels = doc.data().labels;
             });
@@ -224,13 +224,13 @@ const update_pinned = (req, res) => {
 };
 
 const update_note = (req, res) => {
+    console.log(req.body);
     db.collection("posts")
         .doc(req.body.id)
         .update({
             title: req.body.title,
             body: req.body.body,
             bgColor: req.body.bgColor,
-            labels: req.body.labels,
             pinned: req.body.pinned,
         })
         .then(() => {
@@ -243,8 +243,6 @@ const update_note = (req, res) => {
 };
 
 const update_label = (req, res) => {
-    console.log("ID: ", req.body.id);
-    console.log("labels: ", req.body.labels);
     db.collection("posts")
         .doc(req.body.id)
         .update({

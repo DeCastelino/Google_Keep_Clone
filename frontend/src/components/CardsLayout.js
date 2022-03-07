@@ -4,13 +4,17 @@ import ArchivedNoteCard from "./ArchivedNoteCard";
 import TrashNoteCard from "./TrashNoteCard";
 
 // MUI Components
-import { Grid } from "@mui/material";
+import Masonry from "@mui/lab/Masonry";
 
 const CardsLayout = ({ notes, labels }) => {
     return (
-        <Grid container spacing={3} pl={5} pr={2}>
+        <Masonry
+            columns={{ xs: 1, sm: 2, md: 3, lg: 5, xl: 7 }}
+            spacing={3}
+            sx={{ paddingLeft: 3 }}
+        >
             {notes.map((note) => (
-                <Grid item xs={6} md={3} lg={2.3}>
+                <>
                     {note.type === "home" && (
                         <NoteCard note={note} labels={labels} key={note.id} />
                     )}
@@ -20,9 +24,9 @@ const CardsLayout = ({ notes, labels }) => {
                     {note.type === "trash" && (
                         <TrashNoteCard note={note} key={note.id} />
                     )}
-                </Grid>
+                </>
             ))}
-        </Grid>
+        </Masonry>
     );
 };
 

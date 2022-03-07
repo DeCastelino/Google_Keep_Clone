@@ -6,6 +6,7 @@ import axios from "axios";
 
 // MUI Components
 import {
+    styled,
     Card,
     CardActions,
     CardContent,
@@ -35,18 +36,27 @@ import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
 import SearchIcon from "@mui/icons-material/Search";
 
-function showCoords(event) {
-    const x = event.clientX;
-    const y = event.clientY;
-    console.log(`Coords: ${x}, ${y}`);
-}
+const PostItCard = styled(Card)`
+    display: block;
+    background: #ffc;
+    font-family: "Handlee", cursive;
+    font-size: 1.5rem;
+    box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
+    transition: transform 0.15s linear;
+    &:hover,
+    &:focus {
+        box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.3);
+        transform: scale(1.1);
+        position: relative;
+        z-index: 5;
+    }
+`;
 
 const NoteCard = ({ note, labels, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [open, setOpen] = useState(false);
     const [display, setDisplay] = useState("block");
-    const [variant, setVariant] = useState("outlined");
-    const [activeColor, setActiveColor] = useState("#ffffff"); // white
+    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yellow
     const [title, setTitle] = useState(note.title);
     const [body, setBody] = useState(note.body);
     const [bgColor, setBgColor] = useState(note.bgColor);
@@ -55,6 +65,7 @@ const NoteCard = ({ note, labels, key }) => {
     const [openLabelMenu, setopenLabelMenu] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [labelSelect, setLabelSelect] = useState("");
+    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // Toggling Pin
     const handlePinned = () => {
@@ -73,15 +84,12 @@ const NoteCard = ({ note, labels, key }) => {
 
     // highlights the note card when mouse is over it
     const onMouseOver = (event) => {
-        showCoords(event);
         setActiveColor("iconColorActive");
-        setVariant("elevation");
     };
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor("#ffffff"); // white
-        setVariant("outlined");
+        setActiveColor("#ffc"); // post-it yello
     };
 
     // Delete the selected Label from the note
@@ -125,7 +133,6 @@ const NoteCard = ({ note, labels, key }) => {
     const handleEditNote = () => {
         // Transform the note to make it editable
         setOpen(true);
-        setDisplay("none");
     };
 
     const handleClose = () => {
@@ -183,13 +190,11 @@ const NoteCard = ({ note, labels, key }) => {
 
     return (
         <>
-            <Card
-                variant={variant}
+            <PostItCard
                 p={1}
-                sx={{ borderRadius: 3, display: display }}
+                sx={{ transform: `rotate(${rotate}deg)` }}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
-                raised
             >
                 <CardHeader
                     title={title}
@@ -292,7 +297,7 @@ const NoteCard = ({ note, labels, key }) => {
                         </MenuList>
                     </Menu>
                 </CardActions>
-            </Card>
+            </PostItCard>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -344,6 +349,18 @@ const NoteCard = ({ note, labels, key }) => {
                                 sx={{ paddingBottom: 2 }}
                                 onChange={(e) => setBody(e.target.value)}
                             />
+                            <Box sx={{ paddingX: 1 }}>
+                                {activeLabels.map((label) => (
+                                    <Chip
+                                        label={label}
+                                        size="small"
+                                        onDelete={() =>
+                                            handleDeleteLabel(label)
+                                        }
+                                        sx={{ padding: 0, marginRight: 1 }}
+                                    />
+                                ))}
+                            </Box>
                             <CardActions
                                 sx={{
                                     display: "flex",

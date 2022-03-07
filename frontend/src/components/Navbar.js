@@ -325,27 +325,15 @@ const Navbar = (props) => {
                                     </NavLink>
                                 </Tooltip>
                                 <Tooltip title="Label">
-                                    {active === "label" ? (
-                                        <LabelIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                            onClick={handleOpenLabelMenu}
-                                        />
-                                    ) : (
-                                        <LabelOutlinedIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                            onClick={handleOpenLabelMenu}
-                                        />
-                                    )}
+                                    <LabelOutlinedIcon
+                                        sx={{
+                                            cursor: "pointer",
+                                            marginRight: 5,
+                                            fontSize: 30,
+                                            color: "#5F6368",
+                                        }}
+                                        onClick={handleOpenLabelMenu}
+                                    />
                                 </Tooltip>
                                 <LabelDropdown
                                     anchorElLabel={anchorElLabel}

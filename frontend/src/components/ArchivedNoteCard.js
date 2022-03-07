@@ -6,6 +6,7 @@ import axios from "axios";
 
 // MUI Components
 import {
+    styled,
     Card,
     CardActions,
     CardContent,
@@ -13,7 +14,6 @@ import {
     Box,
     Chip,
     Tooltip,
-    Slide,
 } from "@mui/material";
 
 // MUI Icons Components
@@ -25,10 +25,27 @@ import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import IconButton from "@mui/material/IconButton";
 import LabelIcon from "@mui/icons-material/Label";
 
+const PostItCard = styled(Card)`
+    display: block;
+    background: #ffc;
+    font-family: "Handlee", cursive;
+    font-size: 1.5rem;
+    box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
+    transition: transform 0.15s linear;
+    &:hover,
+    &:focus {
+        box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.3);
+        transform: scale(1.1);
+        position: relative;
+        z-index: 5;
+    }
+`;
+
 const ArchivedNoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [variant, setVariant] = useState("outlined");
-    const [activeColor, setActiveColor] = useState("#ffffff"); // white
+    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yellow
+    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // Pinned notes are transferred to Pinned Notes section in Home tab.
     const handlePinned = () => {
@@ -48,13 +65,11 @@ const ArchivedNoteCard = ({ note, key }) => {
     // highlights the note card when mouse is over it
     const onMouseOver = () => {
         setActiveColor("iconColorActive");
-        setVariant("elevation");
     };
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor("#ffffff"); // white
-        setVariant("outlined");
+        setActiveColor("#ffc"); // post-it yellow
     };
 
     // Delete the selected Label from the note
@@ -96,76 +111,72 @@ const ArchivedNoteCard = ({ note, key }) => {
     };
 
     return (
-        <Slide direction="up" in timeout={200}>
-            <Card
-                variant={variant}
-                p={1}
-                sx={{ borderRadius: 3 }}
-                onMouseOver={onMouseOver}
-                onMouseOut={onMouseOut}
-                raised
-            >
-                <CardHeader
-                    title={note.title}
-                    action={
-                        <IconButton onClick={handlePinned}>
-                            {pinned ? (
-                                <PushPinIcon
-                                    color={activeColor}
-                                    sx={{ fontSize: 20 }}
-                                />
-                            ) : (
-                                <PushPinOutlinedIcon
-                                    sx={{ fontSize: 20, color: activeColor }}
-                                />
-                            )}
-                        </IconButton>
-                    }
-                />
-                <CardContent>{note.body}</CardContent>
-                <Box sx={{ paddingX: 1 }}>
-                    {note.labels.map((label) => (
-                        <Chip
-                            label={label}
-                            size="small"
-                            onDelete={() => handleDeleteLabel(label)}
-                            sx={{ padding: 0, marginRight: 1 }}
+        <PostItCard
+            p={1}
+            sx={{
+                transform: `rotate(${rotate}deg)`,
+            }}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+        >
+            <CardHeader
+                title={note.title}
+                action={
+                    <IconButton onClick={handlePinned}>
+                        {pinned ? (
+                            <PushPinIcon
+                                color={activeColor}
+                                sx={{ fontSize: 20 }}
+                            />
+                        ) : (
+                            <PushPinOutlinedIcon
+                                sx={{ fontSize: 20, color: activeColor }}
+                            />
+                        )}
+                    </IconButton>
+                }
+            />
+            <CardContent>{note.body}</CardContent>
+            <Box sx={{ paddingX: 1 }}>
+                {note.labels.map((label) => (
+                    <Chip
+                        label={label}
+                        size="small"
+                        onDelete={() => handleDeleteLabel(label)}
+                        sx={{ padding: 0, marginRight: 1 }}
+                    />
+                ))}
+            </Box>
+            <CardActions>
+                <Tooltip title="delete">
+                    <IconButton onClick={handleDeleteNote}>
+                        <DeleteIcon
+                            variant="outlined"
+                            sx={{ fontSize: 20, color: activeColor }}
                         />
-                    ))}
-                </Box>
-                <CardActions>
-                    <Tooltip title="delete">
-                        <IconButton onClick={handleDeleteNote}>
-                            <DeleteIcon
-                                variant="outlined"
-                                sx={{ fontSize: 20, color: activeColor }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="unarchive">
-                        <IconButton onClick={handleUnarchiveNote}>
-                            <UnarchiveIcon
-                                sx={{ fontSize: 20, color: activeColor }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="background color">
-                        <IconButton>
-                            <ColorLensIcon
-                                sx={{ fontSize: 20, color: activeColor }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="label">
-                        <IconButton>
-                            <LabelIcon
-                                sx={{ fontSize: 20, color: activeColor }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                </CardActions>
-            </Card>
-        </Slide>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="unarchive">
+                    <IconButton onClick={handleUnarchiveNote}>
+                        <UnarchiveIcon
+                            sx={{ fontSize: 20, color: activeColor }}
+                        />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="background color">
+                    <IconButton>
+                        <ColorLensIcon
+                            sx={{ fontSize: 20, color: activeColor }}
+                        />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="label">
+                    <IconButton>
+                        <LabelIcon sx={{ fontSize: 20, color: activeColor }} />
+                    </IconButton>
+                </Tooltip>
+            </CardActions>
+        </PostItCard>
     );
 };
 
