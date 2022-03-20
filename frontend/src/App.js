@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
+import Search from "./components/Search";
 import { Context } from "./components/Context/userContext";
 
 // MUI components
@@ -57,6 +58,10 @@ function App() {
                         <Route
                             path="/login"
                             element={user ? <Home /> : <Login />}
+                        />
+                        <Route
+                            path="/search"
+                            element={user ? <Search /> : <Login />}
                         />
                         <Route path="*" element={user ? <Home /> : <Login />} />
                     </Routes>

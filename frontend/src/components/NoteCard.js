@@ -1,5 +1,5 @@
 // React Components
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // NPM Components
 import axios from "axios";
@@ -22,7 +22,6 @@ import {
     Checkbox,
     Menu,
     MenuList,
-    Input,
     InputAdornment,
 } from "@mui/material";
 
@@ -38,7 +37,6 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const PostItCard = styled(Card)`
     display: block;
-    background: #ffc;
     font-family: "Handlee", cursive;
     font-size: 1.5rem;
     box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
@@ -56,7 +54,7 @@ const NoteCard = ({ note, labels, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [open, setOpen] = useState(false);
     const [display, setDisplay] = useState("block");
-    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yellow
+    const [activeColor, setActiveColor] = useState(note.bgColor);
     const [title, setTitle] = useState(note.title);
     const [body, setBody] = useState(note.body);
     const [bgColor, setBgColor] = useState(note.bgColor);
@@ -65,7 +63,6 @@ const NoteCard = ({ note, labels, key }) => {
     const [openLabelMenu, setopenLabelMenu] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [labelSelect, setLabelSelect] = useState("");
-    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // Toggling Pin
     const handlePinned = () => {
@@ -89,7 +86,7 @@ const NoteCard = ({ note, labels, key }) => {
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor("#ffc"); // post-it yello
+        setActiveColor(note.bgColor);
     };
 
     // Delete the selected Label from the note
@@ -192,7 +189,10 @@ const NoteCard = ({ note, labels, key }) => {
         <>
             <PostItCard
                 p={1}
-                sx={{ transform: `rotate(${rotate}deg)` }}
+                sx={{
+                    backgroundColor: bgColor,
+                    transform: `rotate(${note.rotate}deg)`,
+                }}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
             >
@@ -263,16 +263,22 @@ const NoteCard = ({ note, labels, key }) => {
                         onClose={handleCloseLabelMenu}
                         sx={{ padding: 0, margin: 0 }}
                     >
-                        <Input
-                            placeholder="Search Label"
+                        <TextField
+                            variant="standard"
+                            size="small"
+                            placeholder="search label"
                             value={labelSelect}
+                            autoFocus
+                            sx={{ marginX: "1em" }}
+                            InputProps={{
+                                disableUnderline: true,
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
                             onChange={(e) => setLabelSelect(e.target.value)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            }
-                            sx={{ marginX: 1 }}
                         />
                         <MenuList>
                             {labelList
@@ -305,7 +311,7 @@ const NoteCard = ({ note, labels, key }) => {
                 sx={{ height: "60vh" }}
             >
                 <ClickAwayListener onClickAway={handleClose}>
-                    <Card>
+                    <Card sx={{ backgroundColor: bgColor }}>
                         <Box p={2} pb={0} sx={{ position: "relative" }}>
                             <CardHeader
                                 action={
@@ -365,6 +371,7 @@ const NoteCard = ({ note, labels, key }) => {
                                 sx={{
                                     display: "flex",
                                     flexDirection: "row",
+                                    position: "relative",
                                 }}
                             >
                                 <Tooltip title="delete">
@@ -407,7 +414,10 @@ const NoteCard = ({ note, labels, key }) => {
                                     variant="text"
                                     onClick={handleClose}
                                     sx={{
-                                        color: "gray", // TODO: Align Button to right
+                                        color: "black",
+                                        position: "absolute",
+                                        right: 0,
+                                        bottom: "0.25em",
                                     }}
                                 >
                                     Close

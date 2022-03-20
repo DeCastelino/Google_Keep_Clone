@@ -18,6 +18,7 @@ const get_home_notes = async (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);
@@ -45,6 +46,7 @@ const get_archived_notes = (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);
@@ -72,6 +74,7 @@ const get_trash_notes = (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);
@@ -93,6 +96,7 @@ const upload_note = async (req, res) => {
             labels: req.body.labels,
             pinned: req.body.pinned,
             type: req.body.type,
+            rotate: req.body.rotate,
             createdAt: new Date(),
             updatedAt: new Date(),
         })
@@ -257,6 +261,65 @@ const update_label = (req, res) => {
         });
 };
 
+const get_notes_by_label = (req, res) => {
+    db.collection("posts")
+        .where("labels", "array-contains", req.params.label)
+        .get()
+        .then((snapshot) => {
+            let posts = [];
+            snapshot.forEach((doc) => {
+                posts.push({
+                    id: doc.id,
+                    title: doc.data().title,
+                    body: doc.data().body,
+                    bgColor: doc.data().bgColor,
+                    labels: doc.data().labels,
+                    pinned: doc.data().pinned,
+                    updatedAt: doc.data().updatedAt,
+                    type: doc.data().type,
+                    rotate: doc.data().rotate,
+                });
+            });
+            res.status(200).json(posts);
+        })
+        .catch((err) => {
+            res.sendStatus(500);
+        });
+};
+
+const create_label = async (req, res) => {
+    // Sdding new label to the existing label arrray
+    let labelsList = [];
+    await db
+        .collection("labels")
+        .where("email", "==", req.body.email)
+        .get()
+        .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                labelsList = doc.data().labels;
+            });
+            labelsList.push(req.body.label);
+            console.log("labels: " + labelsList);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    // Updating the label array
+    // db.collection("labels")
+    //     .where("email", "==", req.body.email)
+    //     .get()
+    //     .then((snapshot) => {
+    //         snapshot.forEach((doc) => {
+    //             db.collection("labels").doc(doc.id).update({
+    //                 labels: labelsList,
+    //             });
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
+};
+
 module.exports = {
     get_home_notes,
     get_all_labels,
@@ -272,4 +335,6 @@ module.exports = {
     update_pinned,
     update_note,
     update_label,
+    get_notes_by_label,
+    create_label,
 };

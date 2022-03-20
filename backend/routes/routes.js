@@ -9,6 +9,7 @@ router.get("/getLabels/:email", postController.get_all_labels);
 router.get("/getHomeNotes/:email", postController.get_home_notes);
 router.get("/getArchivedNotes/:email", postController.get_archived_notes);
 router.get("/getDeletedNotes/:email", postController.get_trash_notes);
+router.get("/getNotes/:label", postController.get_notes_by_label);
 
 // POST ROUTES
 router.post("/createNote", postController.upload_note);
@@ -25,6 +26,7 @@ router.post("/deleteNoteForever", postController.delete_note_forever);
 router.post("/restoreNote", postController.restore_note);
 router.post("/updateNote", postController.update_note);
 router.post("/updateLabel", postController.update_label);
+router.post("/createLabel", postController.create_label);
 
 // DELETE ROUTES
 router.post("/deleteLabel/:id", postController.delete_note_label);
