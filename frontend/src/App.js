@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Archive from "./components/Archive";
 import Trash from "./components/Trash";
+import SearchLabel from "./components/SearchLabel";
 import Search from "./components/Search";
 import { Context } from "./components/Context/userContext";
 
@@ -60,8 +61,8 @@ function App() {
                             element={user ? <Home /> : <Login />}
                         />
                         <Route
-                            path="/label/search"
-                            element={user ? <Search /> : <Login />}
+                            path="/label"
+                            element={user ? <SearchLabel /> : <Login />}
                         />
                         <Route
                             path="/?search"
