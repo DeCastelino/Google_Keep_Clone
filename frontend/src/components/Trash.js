@@ -10,11 +10,10 @@ import CardsLayout from "./CardsLayout";
 import { Context } from "./Context/userContext";
 
 // MUI Components
-import { Box, Typography, SpeedDial, SpeedDialAction } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 // MUI Icons Components
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 
 const Trash = () => {
     const { user } = useContext(Context);
@@ -32,7 +31,7 @@ const Trash = () => {
     }, []);
 
     return (
-        <>
+        <div>
             <Navbar active={"trash"} />
             {notes.length > 0 ? (
                 <CardsLayout notes={notes} />
@@ -53,7 +52,7 @@ const Trash = () => {
                     </Typography>
                 </Box>
             )}
-        </>
+        </div>
     );
 };
 

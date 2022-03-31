@@ -1,5 +1,5 @@
 // React Components
-import { cloneElement, useState, useContext } from "react";
+import { Fragment, cloneElement, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 // Custom Components
@@ -13,7 +13,12 @@ import {
     Toolbar,
     Box,
     Typography,
+    Container,
+    InputBase,
+    CssBaseline,
     useScrollTrigger,
+    Zoom,
+    Fab,
     Divider,
     Button,
     IconButton,
@@ -25,8 +30,12 @@ import {
 import PropTypes from "prop-types";
 
 // MUI Icons Components
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import SearchIcon from "@mui/icons-material/Search";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import HomeIcon from "@mui/icons-material/Home";
+import LabelIcon from "@mui/icons-material/Label";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -43,6 +52,52 @@ const AccountButton = styled(Button)`
         border-color: lightgray;
     }
 `;
+
+function ScrollTop(props) {
+    const { children, window } = props;
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const scrollTopTrigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
+
+    const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector(
+            "#back-to-top-anchor"
+        );
+
+        if (anchor) {
+            anchor.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }
+    };
+
+    return (
+        <Zoom in={scrollTopTrigger}>
+            <Box
+                onClick={handleClick}
+                role="presentation"
+                sx={{ position: "fixed", bottom: 16, right: 16 }}
+            >
+                {children}
+            </Box>
+        </Zoom>
+    );
+}
+
+ScrollTop.propTypes = {
+    children: PropTypes.element.isRequired,
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window: PropTypes.func,
+};
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -67,6 +122,50 @@ ElevationScroll.propTypes = {
      * You won't need it on your project.
      */
     window: PropTypes.func,
+};
+
+const Search = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: "#f2f2f2",
+    "&:hover": {
+        backgroundColor: "#f2f2f2",
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: "10px",
+    [theme.breakpoints.up("sm")]: {
+        marginLeft: theme.spacing(3),
+        width: "75ch",
+    },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: "inherit",
+    "& .MuiInputBase-input": {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create("width"),
+        minWidth: "120px",
+        [theme.breakpoints.up("md")]: {
+            width: "75ch",
+        },
+    },
+}));
+
+const handleRefresh = () => {
+    window.location.reload();
 };
 
 const Navbar = (props) => {
@@ -102,241 +201,274 @@ const Navbar = (props) => {
     };
 
     return (
-        <>
+        <Fragment>
+            <CssBaseline />
             <ElevationScroll {...props}>
                 <AppBar
                     position="sticky"
                     color="transparent"
-                    sx={{
-                        backgroundColor: "rgba(255, 255, 255, 0.9)",
-                        marginBottom: "3em",
-                    }}
+                    sx={{ backdropFilter: "blur(100px)" }}
                 >
-                    <Toolbar
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                    >
-                        <NavLink
-                            to="/"
-                            style={{
-                                textDecoration: "none",
-                                color: "black",
-                            }}
-                        >
-                            <Typography
-                                variant="h4"
-                                noWrap
-                                component="div"
+                    <Container maxWidth="xl">
+                        <Toolbar disableGutters>
+                            <NavLink
+                                to="/"
                                 style={{
-                                    fontFamily: "Lobster",
-                                    cursive: true,
+                                    textDecoration: "none",
+                                    color: "black",
                                 }}
                             >
-                                Jot-It
-                            </Typography>
-                        </NavLink>
-                        <SearchBar />
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                            }}
-                        >
-                            <Tooltip title="Home">
-                                <NavLink
-                                    to="/home"
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "black",
-                                    }}
-                                >
-                                    {active === "home" ? (
-                                        <HomeIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    ) : (
-                                        <HomeOutlinedIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    )}
-                                </NavLink>
-                            </Tooltip>
-                            <Tooltip title="Archive">
-                                <NavLink
-                                    to="/archive"
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "black",
-                                    }}
-                                >
-                                    {active === "archive" ? (
-                                        <ArchiveIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    ) : (
-                                        <ArchiveOutlinedIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    )}
-                                </NavLink>
-                            </Tooltip>
-                            <Tooltip title="Label">
-                                <LabelOutlinedIcon
+                                <Typography
+                                    variant="h6"
+                                    noWrap
+                                    component="div"
                                     sx={{
-                                        cursor: "pointer",
-                                        marginRight: 5,
-                                        fontSize: 30,
-                                        color: "#5F6368",
-                                    }}
-                                    onClick={handleOpenLabelMenu}
-                                />
-                            </Tooltip>
-                            <LabelDropdown
-                                anchorElLabel={anchorElLabel}
-                                handleCloseLabelMenu={handleCloseLabelMenu}
-                            />
-                            <Tooltip title="Trash">
-                                <NavLink
-                                    to="/trash"
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "black",
+                                        mr: 2,
+                                        display: { xs: "none", md: "flex" },
                                     }}
                                 >
-                                    {active === "trash" ? (
-                                        <DeleteIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    ) : (
-                                        <DeleteOutlineIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                                marginRight: 5,
-                                                fontSize: 30,
-                                                color: "#5F6368",
-                                            }}
-                                        />
-                                    )}
-                                </NavLink>
-                            </Tooltip>
-                            <Tooltip title="Open Profile">
-                                <IconButton
-                                    onClick={handleOpenUserMenu}
-                                    sx={{ p: 0 }}
-                                >
-                                    <Avatar
-                                        src={user.profilePicture}
-                                        sx={{ width: 35, height: 35 }}
-                                    />
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
+                                    NOTES
+                                </Typography>
+                            </NavLink>
+                            <Box
                                 sx={{
-                                    mt: "45px",
+                                    flexGrow: 1,
+                                    display: { xs: "none", md: "flex" },
+                                    pl: 4,
+                                    alignItems: "center",
                                 }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: "top",
-                                    horizontal: "right",
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "right",
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
                             >
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        paddingX: 6,
-                                        paddingY: 2,
-                                    }}
-                                >
-                                    <Avatar
-                                        src={user.profilePicture}
+                                <Search sx={{ width: "100%" }}>
+                                    <SearchIconWrapper>
+                                        <SearchIcon />
+                                    </SearchIconWrapper>
+                                    <StyledInputBase
+                                        placeholder="Search…"
+                                        inputProps={{ "aria-label": "search" }}
+                                    />
+                                </Search>
+                            </Box>
+
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexGrow: 0,
+                                    alignItems: "center",
+                                }}
+                            >
+                                <Tooltip title="Refresh">
+                                    <RefreshIcon
+                                        onClick={handleRefresh}
                                         sx={{
-                                            width: 100,
-                                            height: 100,
-                                            alignContent: "center",
+                                            cursor: "pointer",
+                                            marginRight: 5,
+                                            fontSize: 30,
+                                            color: "#5F6368",
                                         }}
                                     />
-                                    <Typography
-                                        variant="subtitle1"
-                                        color="gray"
-                                        align="center"
-                                        paddingTop={1}
-                                    >
-                                        {user.email}
-                                    </Typography>
-                                    <AccountButton
-                                        variant="outlined"
-                                        sx={{
-                                            borderRadius: 20,
-                                            marginY: 3,
-                                            paddingX: 3,
+                                </Tooltip>
+                                <Tooltip title="Home">
+                                    <NavLink
+                                        to="/home"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
                                         }}
-                                        onClick={toggleSettings}
                                     >
-                                        Manage your account
-                                    </AccountButton>
-                                    <AccountButton
-                                        variant="outlined"
-                                        sx={{
-                                            marginBottom: 1,
-                                            paddingY: 1,
-                                            paddingX: 3,
+                                        {active === "home" ? (
+                                            <HomeIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <HomeOutlinedIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
+                                </Tooltip>
+                                <Tooltip title="Archive">
+                                    <NavLink
+                                        to="/archive"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
                                         }}
-                                        onClick={handleLogout}
                                     >
-                                        Logout
-                                    </AccountButton>
-                                </Box>
-                            </Menu>
-                            <Settings
-                                open={open}
-                                toggleSettings={toggleSettings}
-                            />
-                        </Box>
-                    </Toolbar>
+                                        {active === "archive" ? (
+                                            <ArchiveIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <ArchiveOutlinedIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
+                                </Tooltip>
+                                <Tooltip title="Label">
+                                    <LabelOutlinedIcon
+                                        sx={{
+                                            cursor: "pointer",
+                                            marginRight: 5,
+                                            fontSize: 30,
+                                            color: "#5F6368",
+                                        }}
+                                        onClick={handleOpenLabelMenu}
+                                    />
+                                </Tooltip>
+                                <LabelDropdown
+                                    anchorElLabel={anchorElLabel}
+                                    handleCloseLabelMenu={handleCloseLabelMenu}
+                                />
+                                <Tooltip title="Trash">
+                                    <NavLink
+                                        to="/trash"
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "black",
+                                        }}
+                                    >
+                                        {active === "trash" ? (
+                                            <DeleteIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        ) : (
+                                            <DeleteOutlineIcon
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginRight: 5,
+                                                    fontSize: 30,
+                                                    color: "#5F6368",
+                                                }}
+                                            />
+                                        )}
+                                    </NavLink>
+                                </Tooltip>
+                                <Tooltip title="Open Profile">
+                                    <IconButton
+                                        onClick={handleOpenUserMenu}
+                                        sx={{ p: 0 }}
+                                    >
+                                        <Avatar
+                                            src={user.profilePicture}
+                                            sx={{ width: 35, height: 35 }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{
+                                        mt: "45px",
+                                    }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            paddingX: 6,
+                                            paddingY: 2,
+                                        }}
+                                    >
+                                        <Avatar
+                                            src={user.profilePicture}
+                                            sx={{
+                                                width: 100,
+                                                height: 100,
+                                                alignContent: "center",
+                                            }}
+                                        />
+                                        <Typography
+                                            variant="subtitle1"
+                                            color="gray"
+                                            align="center"
+                                            paddingTop={1}
+                                        >
+                                            {user.email}
+                                        </Typography>
+                                        <AccountButton
+                                            variant="outlined"
+                                            sx={{
+                                                borderRadius: 20,
+                                                marginY: 3,
+                                                paddingX: 3,
+                                            }}
+                                            onClick={toggleSettings}
+                                        >
+                                            Manage your account
+                                        </AccountButton>
+                                        <AccountButton
+                                            variant="outlined"
+                                            sx={{
+                                                marginBottom: 1,
+                                                paddingY: 1,
+                                                paddingX: 3,
+                                            }}
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </AccountButton>
+                                    </Box>
+                                </Menu>
+                                <Settings
+                                    open={open}
+                                    toggleSettings={toggleSettings}
+                                />
+                            </Box>
+                        </Toolbar>
+                    </Container>
                     <Divider />
                 </AppBar>
             </ElevationScroll>
-        </>
+            <Toolbar id="back-to-top-anchor" />
+            <ScrollTop {...props}>
+                <Fab
+                    color="secondary"
+                    size="medium"
+                    aria-label="scroll back to top"
+                >
+                    <KeyboardArrowUpIcon />
+                </Fab>
+            </ScrollTop>
+        </Fragment>
     );
 };
 export default Navbar;

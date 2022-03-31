@@ -27,6 +27,7 @@ import LabelIcon from "@mui/icons-material/Label";
 
 const PostItCard = styled(Card)`
     display: block;
+    background: #ffc;
     font-family: "Handlee", cursive;
     font-size: 1.5rem;
     box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
@@ -42,7 +43,9 @@ const PostItCard = styled(Card)`
 
 const ArchivedNoteCard = ({ note, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
-    const [activeColor, setActiveColor] = useState(note.bgColor);
+    const [variant, setVariant] = useState("outlined");
+    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yellow
+    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // Pinned notes are transferred to Pinned Notes section in Home tab.
     const handlePinned = () => {
@@ -66,7 +69,7 @@ const ArchivedNoteCard = ({ note, key }) => {
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor(note.bgColor);
+        setActiveColor("#ffc"); // post-it yellow
     };
 
     // Delete the selected Label from the note
@@ -111,8 +114,7 @@ const ArchivedNoteCard = ({ note, key }) => {
         <PostItCard
             p={1}
             sx={{
-                transform: `rotate(${note.rotate}deg)`,
-                backgroundColor: note.bgColor,
+                transform: `rotate(${rotate}deg)`,
             }}
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}

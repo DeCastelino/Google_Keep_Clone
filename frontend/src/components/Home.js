@@ -1,5 +1,5 @@
 // React Components
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 
 // NPM Components
 import axios from "axios";
@@ -10,19 +10,11 @@ import CardsLayout from "./CardsLayout";
 import CreateNote from "./CreateNote";
 import { Context } from "./Context/userContext";
 
-import { SpeedDial, SpeedDialAction } from "@mui/material";
-
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-
 const Home = () => {
     const { user } = useContext(Context);
     const [notes, setNotes] = useState([]);
     const [labels, setLabels] = useState([]);
-    const [bgColor, setBgColor] = useState("");
-    const [open, setOpen] = useState(false);
-    const isMounted = useRef(false);
 
-    // fetching all notes and labels for this user
     useEffect(() => {
         axios
             .get(`http://localhost:8000/getHomeNotes/${user.email}`)
@@ -42,46 +34,12 @@ const Home = () => {
             });
     }, []);
 
-    useEffect(() => {
-        if (isMounted.current) {
-            setOpen((prev) => !prev);
-        } else {
-            isMounted.current = true;
-        }
-    }, [bgColor]);
-
     return (
-        <>
+        <div>
             <Navbar active={"home"} />
+            <CreateNote />
             <CardsLayout notes={notes} labels={labels} />
-            <SpeedDial
-                ariaLabel="Create New Note"
-                sx={{ position: "fixed", bottom: 15, right: 15 }}
-                icon={<SpeedDialIcon />}
-            >
-                <SpeedDialAction
-                    sx={{ backgroundColor: "#FF6961" }}
-                    tooltipTitle="Red"
-                    onClick={() => setBgColor("#FF6961")}
-                />
-                <SpeedDialAction
-                    sx={{ backgroundColor: "#FDFD96" }}
-                    tooltipTitle="Yellow"
-                    onClick={() => setBgColor("#FDFD96")}
-                />
-                <SpeedDialAction
-                    sx={{ backgroundColor: "#C1E1C1" }}
-                    tooltipTitle="Green"
-                    onClick={() => setBgColor("#C1E1C1")}
-                />
-                <SpeedDialAction
-                    sx={{ backgroundColor: "#A7C7E7" }}
-                    tooltipTitle="Blue"
-                    onClick={() => setBgColor("#A7C7E7")}
-                />
-            </SpeedDial>
-            {open && <CreateNote background={bgColor} />}
-        </>
+        </div>
     );
 };
 

@@ -32,7 +32,7 @@ const Archive = () => {
     }, []);
 
     return (
-        <>
+        <div>
             <Navbar active={"archive"} />
             {notes.length > 0 ? (
                 <CardsLayout notes={notes} />
@@ -53,7 +53,7 @@ const Archive = () => {
                     </Typography>
                 </Box>
             )}
-        </>
+        </div>
     );
 };
 

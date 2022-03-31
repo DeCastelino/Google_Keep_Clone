@@ -23,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 
 const PostItCard = styled(Card)`
     display: block;
+    background: #ffc;
     font-family: "Handlee", cursive;
     font-size: 1.5rem;
     box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
@@ -37,7 +38,8 @@ const PostItCard = styled(Card)`
 `;
 
 const TrashNoteCard = ({ note, key }) => {
-    const [activeColor, setActiveColor] = useState(note.bgColor);
+    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yello
+    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // highlights the note card when mouse is over it
     const onMouseOver = () => {
@@ -46,7 +48,7 @@ const TrashNoteCard = ({ note, key }) => {
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor(note.bgColor);
+        setActiveColor("#ffc"); // post-it yellow
     };
 
     // Permanantly delete the selected note
@@ -76,10 +78,7 @@ const TrashNoteCard = ({ note, key }) => {
     return (
         <PostItCard
             p={1}
-            sx={{
-                transform: `rotate(${note.rotate}deg)`,
-                backgroundColor: note.bgColor,
-            }}
+            sx={{ transform: `rotate(${rotate}deg)` }}
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}
         >
