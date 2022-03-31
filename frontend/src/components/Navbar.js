@@ -13,7 +13,6 @@ import {
     Toolbar,
     Box,
     Typography,
-    InputBase,
     useScrollTrigger,
     Divider,
     Button,
@@ -26,7 +25,6 @@ import {
 import PropTypes from "prop-types";
 
 // MUI Icons Components
-import SearchIcon from "@mui/icons-material/Search";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import HomeIcon from "@mui/icons-material/Home";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
@@ -34,6 +32,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import SearchBar from "./SearchBar";
 
 const AccountButton = styled(Button)`
     padding: 0px 10px;
@@ -43,17 +42,6 @@ const AccountButton = styled(Button)`
         background-color: offwhite;
         border-color: lightgray;
     }
-`;
-
-const Search = styled(Box)`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-    border-radius: 10px;
-    margin: 0px 20px;
-    width: 50%;
-    background-color: #f2f2f2;
 `;
 
 function ElevationScroll(props) {
@@ -80,30 +68,6 @@ ElevationScroll.propTypes = {
      */
     window: PropTypes.func,
 };
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create("width"),
-        minWidth: "120px",
-        [theme.breakpoints.up("md")]: {
-            width: "75ch",
-        },
-    },
-}));
 
 const Navbar = (props) => {
     const { user, setUser } = useContext(Context);
@@ -174,13 +138,7 @@ const Navbar = (props) => {
                                 Jot-It
                             </Typography>
                         </NavLink>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase placeholder="Search…" />
-                        </Search>
-
+                        <SearchBar />
                         <Box
                             sx={{
                                 display: "flex",

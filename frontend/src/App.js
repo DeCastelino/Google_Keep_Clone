@@ -60,7 +60,11 @@ function App() {
                             element={user ? <Home /> : <Login />}
                         />
                         <Route
-                            path="/search"
+                            path="/label/search"
+                            element={user ? <Search /> : <Login />}
+                        />
+                        <Route
+                            path="/?search"
                             element={user ? <Search /> : <Login />}
                         />
                         <Route path="*" element={user ? <Home /> : <Login />} />

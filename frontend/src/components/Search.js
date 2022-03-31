@@ -4,10 +4,9 @@ import FilteredLayout from "./FilteredLayout";
 import Navbar from "./Navbar";
 
 const Search = () => {
-    // const [selectedLabel, setSelectedLabel] = useState(null);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const selectedLabel = urlParams.get("label");
+    const selectedLabel = urlParams.get("value");
     console.log(selectedLabel);
 
     return (
