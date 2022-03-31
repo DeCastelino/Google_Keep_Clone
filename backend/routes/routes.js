@@ -10,6 +10,7 @@ router.get("/getHomeNotes/:email", postController.get_home_notes);
 router.get("/getArchivedNotes/:email", postController.get_archived_notes);
 router.get("/getDeletedNotes/:email", postController.get_trash_notes);
 router.get("/getNotes/:label", postController.get_notes_by_label);
+router.get("/getNotes", postController.get_all_notes);
 
 // POST ROUTES
 router.post("/createNote", postController.upload_note);

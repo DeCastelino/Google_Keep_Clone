@@ -16,10 +16,12 @@ import {
     InputAdornment,
     MenuList,
     ClickAwayListener,
+    IconButton,
 } from "@mui/material";
 
 // MUI Icons Components
 import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 
 const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
     const [search, setSearch] = useState("");
@@ -33,6 +35,7 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
             .get(`http://localhost:8000/getLabels/${user.email}`)
             .then((res) => {
                 setLabels(res.data);
+                setFilteredLabels(res.data);
             });
     }, []);
 
@@ -48,7 +51,7 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
     }, [search]);
 
     // resetting search field after closing menu
-    const closeMenu = () => {
+    const handleClearSearch = () => {
         setSearch("");
     };
 
@@ -68,7 +71,7 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
     };
 
     return (
-        <ClickAwayListener onClickAway={closeMenu}>
+        <ClickAwayListener onClickAway={handleClearSearch}>
             <Menu
                 anchorEl={anchorElLabel}
                 anchorOrigin={{
@@ -86,7 +89,6 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
                 <TextField
                     variant="standard"
                     size="small"
-                    autoFocus
                     placeholder="search label"
                     value={search}
                     sx={{ marginX: "1em" }}
@@ -94,32 +96,43 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
                         disableUnderline: true,
                         endAdornment: (
                             <InputAdornment position="end">
-                                <SearchIcon />
+                                <IconButton
+                                    onClick={handleClearSearch}
+                                    sx={{ padding: 0, margin: 0 }}
+                                >
+                                    {search === "" ? (
+                                        <SearchIcon />
+                                    ) : (
+                                        <CloseIcon />
+                                    )}
+                                </IconButton>
                             </InputAdornment>
                         ),
                     }}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <MenuList>
-                    {filteredLabels.map((filteredLabel) => (
-                        <MenuItem>
-                            <Link
-                                to={`/search?label=${filteredLabel}`}
-                                style={{
-                                    textDecoration: "none",
-                                    color: "black",
-                                }}
-                            >
-                                {filteredLabel}
-                            </Link>
-                        </MenuItem>
-                    ))}
-                    {search !== "" && (
-                        <MenuItem onClick={handleCreateLabel}>
-                            Create <strong>&nbsp;"{search}"&nbsp;</strong>
-                        </MenuItem>
-                    )}
-                </MenuList>
+                <div>
+                    <MenuList>
+                        {filteredLabels.map((filteredLabel) => (
+                            <MenuItem>
+                                <Link
+                                    to={`/labelSearch?value=${filteredLabel}`}
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                >
+                                    {filteredLabel}
+                                </Link>
+                            </MenuItem>
+                        ))}
+                        {search !== "" && (
+                            <MenuItem onClick={handleCreateLabel}>
+                                Create <strong>&nbsp;"{search}"&nbsp;</strong>
+                            </MenuItem>
+                        )}
+                    </MenuList>
+                </div>
             </Menu>
         </ClickAwayListener>
     );

@@ -304,20 +304,33 @@ const create_label = async (req, res) => {
         .catch((err) => {
             console.log(err);
         });
-    // Updating the label array
-    // db.collection("labels")
-    //     .where("email", "==", req.body.email)
-    //     .get()
-    //     .then((snapshot) => {
-    //         snapshot.forEach((doc) => {
-    //             db.collection("labels").doc(doc.id).update({
-    //                 labels: labelsList,
-    //             });
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
+};
+
+const get_all_notes = (req, res) => {
+    db.collection("posts")
+        .where("type", "!=", "trash")
+        .get()
+        .then((snapshot) => {
+            let posts = [];
+            snapshot.forEach((doc) => {
+                posts.push({
+                    id: doc.id,
+                    title: doc.data().title,
+                    body: doc.data().body,
+                    bgColor: doc.data().bgColor,
+                    labels: doc.data().labels,
+                    pinned: doc.data().pinned,
+                    updatedAt: doc.data().updatedAt,
+                    type: doc.data().type,
+                    rotate: doc.data().rotate,
+                });
+            });
+            res.status(200).json(posts);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(404);
+        });
 };
 
 module.exports = {
@@ -337,4 +350,5 @@ module.exports = {
     update_label,
     get_notes_by_label,
     create_label,
+    get_all_notes,
 };
