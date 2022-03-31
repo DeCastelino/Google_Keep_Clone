@@ -10,7 +10,7 @@ import CardsLayout from "./CardsLayout";
 import { Context } from "./Context/userContext";
 
 // MUI Components
-import { Box, Typography } from "@mui/material";
+import { styled, Box, Typography } from "@mui/material";
 
 // MUI Icons Component
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
@@ -32,7 +32,7 @@ const Archive = () => {
     }, []);
 
     return (
-        <div>
+        <>
             <Navbar active={"archive"} />
             {notes.length > 0 ? (
                 <CardsLayout notes={notes} />
@@ -46,14 +46,14 @@ const Archive = () => {
                     }}
                 >
                     <ArchiveOutlinedIcon
-                        sx={{ height: 150, width: 150, color: "lightgrey" }}
+                        sx={{ height: 150, width: 150, color: "gray" }}
                     />
                     <Typography pt={3} variant="h4" color="gray">
                         Your archived notes appear here
                     </Typography>
                 </Box>
             )}
-        </div>
+        </>
     );
 };
 

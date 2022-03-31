@@ -65,7 +65,6 @@ const NoteCard = ({ note, labels, key }) => {
     const [openLabelMenu, setopenLabelMenu] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [labelSelect, setLabelSelect] = useState("");
-    const rotate = Math.floor(Math.random() * (5 - -5) + -5);
 
     // Toggling Pin
     const handlePinned = () => {
@@ -192,7 +191,7 @@ const NoteCard = ({ note, labels, key }) => {
         <>
             <PostItCard
                 p={1}
-                sx={{ transform: `rotate(${rotate}deg)` }}
+                sx={{ transform: `rotate(${note.rotate}deg)` }}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
             >

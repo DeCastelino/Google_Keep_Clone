@@ -37,7 +37,6 @@ const Home = () => {
     return (
         <div>
             <Navbar active={"home"} />
-            <CreateNote />
             <CardsLayout notes={notes} labels={labels} />
         </div>
     );

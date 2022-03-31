@@ -18,6 +18,7 @@ const get_home_notes = async (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);
@@ -45,6 +46,7 @@ const get_archived_notes = (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);
@@ -72,6 +74,7 @@ const get_trash_notes = (req, res) => {
                     pinned: doc.data().pinned,
                     updatedAt: doc.data().updatedAt,
                     type: doc.data().type,
+                    rotate: doc.data().rotate,
                 });
             });
             res.status(200).json(posts);

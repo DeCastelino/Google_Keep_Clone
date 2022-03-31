@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { Context } from "./Context/userContext";
 import Settings from "./Setting";
 import LabelDropdown from "./LabelDropdown";
+import SearchBar from "./SearchBar";
 
 // MUI Components
 import {
@@ -17,8 +18,6 @@ import {
     InputBase,
     CssBaseline,
     useScrollTrigger,
-    Zoom,
-    Fab,
     Divider,
     Button,
     IconButton,
@@ -26,22 +25,21 @@ import {
     Tooltip,
     Menu,
     styled,
+    TextField,
+    InputAdornment,
 } from "@mui/material";
 import PropTypes from "prop-types";
 
 // MUI Icons Components
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import HomeIcon from "@mui/icons-material/Home";
-import LabelIcon from "@mui/icons-material/Label";
 import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import SearchBar from "./SearchBar";
 
 const AccountButton = styled(Button)`
     padding: 0px 10px;
@@ -52,52 +50,6 @@ const AccountButton = styled(Button)`
         border-color: lightgray;
     }
 `;
-
-function ScrollTop(props) {
-    const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
-    const scrollTopTrigger = useScrollTrigger({
-        target: window ? window() : undefined,
-        disableHysteresis: true,
-        threshold: 100,
-    });
-
-    const handleClick = (event) => {
-        const anchor = (event.target.ownerDocument || document).querySelector(
-            "#back-to-top-anchor"
-        );
-
-        if (anchor) {
-            anchor.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
-        }
-    };
-
-    return (
-        <Zoom in={scrollTopTrigger}>
-            <Box
-                onClick={handleClick}
-                role="presentation"
-                sx={{ position: "fixed", bottom: 16, right: 16 }}
-            >
-                {children}
-            </Box>
-        </Zoom>
-    );
-}
-
-ScrollTop.propTypes = {
-    children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -124,45 +76,16 @@ ElevationScroll.propTypes = {
     window: PropTypes.func,
 };
 
-const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: "#f2f2f2",
-    "&:hover": {
-        backgroundColor: "#f2f2f2",
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "10px",
-    [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(3),
-        width: "75ch",
-    },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create("width"),
-        minWidth: "120px",
-        [theme.breakpoints.up("md")]: {
-            width: "75ch",
-        },
-    },
-}));
+const Search = styled(Box)`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+    margin: 0px 20px;
+    width: 50%;
+    background-color: #f2f2f2;
+`;
 
 const handleRefresh = () => {
     window.location.reload();
@@ -174,6 +97,7 @@ const Navbar = (props) => {
     const [anchorElLabel, setAnchorElLabel] = useState(null);
     const [active, setActive] = useState(props.active);
     const [open, setOpen] = useState(false);
+    const [seaarch, setSearch] = useState("");
 
     const handleLogout = () => {
         setUser(null);
@@ -207,7 +131,7 @@ const Navbar = (props) => {
                 <AppBar
                     position="sticky"
                     color="transparent"
-                    sx={{ backdropFilter: "blur(100px)" }}
+                    sx={{ marginBottom: 5 }}
                 >
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
@@ -230,30 +154,39 @@ const Navbar = (props) => {
                                     NOTES
                                 </Typography>
                             </NavLink>
-                            <Box
+                            {/* <Box
                                 sx={{
                                     flexGrow: 1,
                                     display: { xs: "none", md: "flex" },
                                     pl: 4,
                                     alignItems: "center",
                                 }}
-                            >
-                                <Search sx={{ width: "100%" }}>
-                                    <SearchIconWrapper>
-                                        <SearchIcon />
-                                    </SearchIconWrapper>
-                                    <StyledInputBase
-                                        placeholder="Search…"
-                                        inputProps={{ "aria-label": "search" }}
-                                    />
-                                </Search>
-                            </Box>
+                            > */}
+                            <Search>
+                                <TextField
+                                    variant="standard"
+                                    placeholder="Search..."
+                                    sx={{ paddingLeft: 2, paddingY: 1 }}
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                        disableUnderline: true,
+                                    }}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                            </Search>
+                            {/* </Box> */}
 
                             <Box
                                 sx={{
                                     display: "flex",
-                                    flexGrow: 0,
                                     alignItems: "center",
+                                    justifyContent: "flex-end",
+                                    backgroundColor: "white",
                                 }}
                             >
                                 <Tooltip title="Refresh">
@@ -268,13 +201,7 @@ const Navbar = (props) => {
                                     />
                                 </Tooltip>
                                 <Tooltip title="Home">
-                                    <NavLink
-                                        to="/home"
-                                        style={{
-                                            textDecoration: "none",
-                                            color: "black",
-                                        }}
-                                    >
+                                    <NavLink to="/home">
                                         {active === "home" ? (
                                             <HomeIcon
                                                 sx={{
@@ -458,16 +385,6 @@ const Navbar = (props) => {
                     <Divider />
                 </AppBar>
             </ElevationScroll>
-            <Toolbar id="back-to-top-anchor" />
-            <ScrollTop {...props}>
-                <Fab
-                    color="secondary"
-                    size="medium"
-                    aria-label="scroll back to top"
-                >
-                    <KeyboardArrowUpIcon />
-                </Fab>
-            </ScrollTop>
         </Fragment>
     );
 };
