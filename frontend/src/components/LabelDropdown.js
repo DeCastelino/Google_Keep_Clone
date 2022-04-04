@@ -1,5 +1,6 @@
 // React Components
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 
 // NPM Components
 import axios from "axios";
@@ -8,12 +9,27 @@ import axios from "axios";
 import { Context } from "./Context/userContext";
 
 // MUI Components
-import { Menu, MenuItem } from "@mui/material";
+import {
+    Menu,
+    MenuItem,
+    TextField,
+    InputAdornment,
+    MenuList,
+    ClickAwayListener,
+    IconButton,
+} from "@mui/material";
+
+// MUI Icons Components
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 
 const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
+    const [search, setSearch] = useState("");
     const [labels, setLabels] = useState([]);
+    const [filteredLabels, setFilteredLabels] = useState([]);
     const { user } = useContext(Context);
 
+    // fetching all labels from the current user
     useEffect(() => {
         axios
             .get(`http://localhost:8000/getLabels/${user.email}`)
@@ -21,32 +37,104 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
                 setLabels(res.data);
                 setFilteredLabels(res.data);
             });
-    }, []);
+    });
+
+    // filtering the labels based on the search query
+    useEffect(() => {
+        if (search === "") setFilteredLabels(labels);
+        else {
+            const filtered = labels.filter((label) => {
+                return label.toLowerCase().includes(search.toLowerCase());
+            });
+            setFilteredLabels(filtered);
+        }
+    }, [search]);
+
+    // resetting search field after closing menu
+    const handleClearSearch = () => {
+        setSearch("");
+    };
+
+    // adding label created by the user to the database and displaying it in the menu
+    const handleCreateLabel = () => {
+        axios
+            .post(`http://localhost:8000/createLabel`, {
+                search,
+                email: user.email,
+            })
+            .then((res) => {
+                setLabels([...labels, search]);
+            })
+            .catch((err) => {
+                alert(err);
+            });
+    };
+
     return (
-        <Menu
-            sx={{
-                mt: "45px",
-            }}
-            id="menu-appbar"
-            anchorEl={anchorElLabel}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={Boolean(anchorElLabel)}
-            onClose={handleCloseLabelMenu}
-        >
-            {labels.map((label) => (
-                <MenuItem sx={{ paddingX: 2, paddingRight: 3, margin: 0 }}>
-                    {label}
-                </MenuItem>
-            ))}
-        </Menu>
+        <ClickAwayListener onClickAway={handleClearSearch}>
+            <Menu
+                anchorEl={anchorElLabel}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+                open={Boolean(anchorElLabel)}
+                onClose={handleCloseLabelMenu}
+            >
+                <TextField
+                    variant="standard"
+                    size="small"
+                    placeholder="search label"
+                    value={search}
+                    sx={{ marginX: "1em" }}
+                    InputProps={{
+                        disableUnderline: true,
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={handleClearSearch}
+                                    sx={{ padding: 0, margin: 0 }}
+                                >
+                                    {search === "" ? (
+                                        <SearchIcon />
+                                    ) : (
+                                        <CloseIcon />
+                                    )}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <div>
+                    <MenuList>
+                        {filteredLabels.map((filteredLabel) => (
+                            <MenuItem>
+                                <Link
+                                    to={`/labelSearch?value=${filteredLabel}`}
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                >
+                                    {filteredLabel}
+                                </Link>
+                            </MenuItem>
+                        ))}
+                        {search !== "" && (
+                            <MenuItem onClick={handleCreateLabel}>
+                                Create <strong>&nbsp;"{search}"&nbsp;</strong>
+                            </MenuItem>
+                        )}
+                    </MenuList>
+                </div>
+            </Menu>
+        </ClickAwayListener>
     );
 };
 

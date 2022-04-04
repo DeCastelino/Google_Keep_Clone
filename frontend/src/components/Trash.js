@@ -45,7 +45,7 @@ const Trash = () => {
                     }}
                 >
                     <DeleteOutlineOutlinedIcon
-                        sx={{ height: 150, width: 150, color: "lightgrey" }}
+                        sx={{ height: 150, width: 150, color: "gray" }}
                     />
                     <Typography pt={3} variant="h4" color="gray">
                         No notes in Trash

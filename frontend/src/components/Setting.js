@@ -130,7 +130,11 @@ const Settings = ({ open, toggleSettings }) => {
                 container
                 spacing={2}
                 padding={2}
-                sx={{ display: "flex", flexDirection: "column" }}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "#e8eae7",
+                }}
             >
                 <Grid item>
                     <Typography
@@ -185,6 +189,7 @@ const Settings = ({ open, toggleSettings }) => {
                         elevation={
                             expanded === "panel1" || expanded === false ? 0 : 1
                         }
+                        sx={{ backgroundColor: "inherit" }}
                     >
                         {expanded !== "panel1" && (
                             <AccordionSummary
@@ -255,6 +260,7 @@ const Settings = ({ open, toggleSettings }) => {
                         elevation={
                             expanded === "panel2" || expanded === false ? 0 : 1
                         }
+                        sx={{ backgroundColor: "inherit" }}
                     >
                         {expanded !== "panel2" && (
                             <AccordionSummary
@@ -318,6 +324,7 @@ const Settings = ({ open, toggleSettings }) => {
                         elevation={
                             expanded === "panel3" || expanded === false ? 0 : 1
                         }
+                        sx={{ backgroundColor: "inherit" }}
                     >
                         {expanded !== "panel3" && (
                             <AccordionSummary
