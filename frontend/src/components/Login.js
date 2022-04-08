@@ -41,15 +41,23 @@ const Login = () => {
     return (
         <Grid
             container
-            justifyContent="center"
             sx={{
-                margin: 0,
-                padding: 0,
                 height: "100vh",
+                width: "100vw",
                 overflow: "hidden",
             }}
         >
-            <Grid item xs={12} md={4} lg={6} height="100%" pl="5%">
+            <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={6}
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
                 <Box
                     sx={{
                         display: "flex",
@@ -92,7 +100,13 @@ const Login = () => {
                     </Typography>
                 </Box>
             </Grid>
-            <Grid item xs={12} md={8} lg={6}>
+            <Grid
+                item
+                lg={6}
+                md={6}
+                sm={6}
+                sx={{ display: { xs: "none", sm: "none", md: "block" } }}
+            >
                 <Box
                     mr={-16}
                     sx={{
