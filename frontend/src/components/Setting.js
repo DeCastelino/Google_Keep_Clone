@@ -67,7 +67,7 @@ const Settings = ({ open, toggleSettings }) => {
         data.append("name", filename);
         data.append("file", file);
         data.append("email", user.email);
-        axios.post("http://localhost:8000/upload", data).then((res) => {
+        axios.post("http://localhost:8080/upload", data).then((res) => {
             user.profilePicture = res.data;
         });
     };
@@ -78,7 +78,7 @@ const Settings = ({ open, toggleSettings }) => {
         setLoading(true);
         const name = { firstname, surname, email: user.email };
         axios
-            .post("http://localhost:8000/updateName", name)
+            .post("http://localhost:8080/updateName", name)
             .then((res) => {
                 user.firstname = firstname;
                 user.surname = surname;
@@ -96,7 +96,7 @@ const Settings = ({ open, toggleSettings }) => {
         setLoading(true);
         const emails = { email: user.email, newEmail: email };
         axios
-            .post("http://localhost:8000/updateEmail", emails)
+            .post("http://localhost:8080/updateEmail", emails)
             .then((res) => {
                 user.email = email;
                 setLoading(false);
@@ -113,7 +113,7 @@ const Settings = ({ open, toggleSettings }) => {
         setLoading(true);
         const passwordInfo = { password, newPassword, email: user.email };
         axios
-            .post("http://localhost:8000/updatePassword", passwordInfo)
+            .post("http://localhost:8080/updatePassword", passwordInfo)
             .then((res) => {
                 setLoading(false);
                 setExpanded(false);

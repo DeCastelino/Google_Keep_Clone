@@ -69,7 +69,7 @@ const NoteCard = ({ note, labels, key }) => {
     // Toggling Pin
     const handlePinned = () => {
         axios
-            .post("http://localhost:8000/updatePinned", {
+            .post("http://localhost:8080/updatePinned", {
                 id: note.id,
                 pinned: !pinned,
             })
@@ -94,7 +94,7 @@ const NoteCard = ({ note, labels, key }) => {
     // Delete the selected Label from the note
     const handleDeleteLabel = (label) => {
         axios
-            .post(`http://localhost:8000/deleteLabel/${note.id}`, {
+            .post(`http://localhost:8080/deleteLabel/${note.id}`, {
                 labelValue: label,
             })
             .then((result) => {
@@ -108,7 +108,7 @@ const NoteCard = ({ note, labels, key }) => {
     // Delete the selected note
     const handleDeleteNote = () => {
         axios
-            .post("http://localhost:8000/deleteNote", { id: note.id })
+            .post("http://localhost:8080/deleteNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })
@@ -120,7 +120,7 @@ const NoteCard = ({ note, labels, key }) => {
     // Archive the selected note
     const handleArchiveNote = () => {
         axios
-            .post("http://localhost:8000/archiveNote", { id: note.id })
+            .post("http://localhost:8080/archiveNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })
@@ -143,7 +143,7 @@ const NoteCard = ({ note, labels, key }) => {
             pinned,
         };
         axios
-            .post("http://localhost:8000/updateNote", notesInfo)
+            .post("http://localhost:8080/updateNote", notesInfo)
             .then((res) => {
                 setOpen(false);
                 setDisplay("block");
@@ -174,7 +174,7 @@ const NoteCard = ({ note, labels, key }) => {
                 labels = activeLabels.filter((l) => l !== label);
             }
             axios
-                .post(`http://localhost:8000/updateLabel`, {
+                .post(`http://localhost:8080/updateLabel`, {
                     labels,
                     id: note.id,
                 })

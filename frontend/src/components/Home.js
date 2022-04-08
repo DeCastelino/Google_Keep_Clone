@@ -17,7 +17,7 @@ const Home = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8000/getHomeNotes/${user.email}`)
+            .get(`http://localhost:8080/getHomeNotes/${user.email}`)
             .then((res) => {
                 setNotes(res.data);
             })
@@ -25,7 +25,7 @@ const Home = () => {
                 alert("Error in fetching notes");
             });
         axios
-            .get(`http://localhost:8000/getLabels/${user.email}`)
+            .get(`http://localhost:8080/getLabels/${user.email}`)
             .then((res) => {
                 setLabels(res.data);
             })

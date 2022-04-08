@@ -63,7 +63,7 @@ const CreateNote = () => {
                 type: "home",
             };
             axios
-                .post("http://localhost:8000/createNote", notesInfo)
+                .post("http://localhost:8080/createNote", notesInfo)
                 .then((res) => {
                     window.location = "/home";
                 })

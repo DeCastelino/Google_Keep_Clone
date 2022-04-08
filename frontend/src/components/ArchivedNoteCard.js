@@ -50,7 +50,7 @@ const ArchivedNoteCard = ({ note, key }) => {
     // Pinned notes are transferred to Pinned Notes section in Home tab.
     const handlePinned = () => {
         axios
-            .post("http://localhost:8000/updatePinned", {
+            .post("http://localhost:8080/updatePinned", {
                 id: note.id,
                 pinned: !pinned,
             })
@@ -75,7 +75,7 @@ const ArchivedNoteCard = ({ note, key }) => {
     // Delete the selected Label from the note
     const handleDeleteLabel = (label) => {
         axios
-            .post(`http://localhost:8000/deleteLabel/${note.id}`, {
+            .post(`http://localhost:8080/deleteLabel/${note.id}`, {
                 labelValue: label,
             })
             .then((result) => {
@@ -89,7 +89,7 @@ const ArchivedNoteCard = ({ note, key }) => {
     // Delete the selected note
     const handleDeleteNote = () => {
         axios
-            .post("http://localhost:8000/deleteNote", { id: note.id })
+            .post("http://localhost:8080/deleteNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })
@@ -101,7 +101,7 @@ const ArchivedNoteCard = ({ note, key }) => {
     // Unarchive the selected note
     const handleUnarchiveNote = () => {
         axios
-            .post("http://localhost:8000/unarchiveNote", { id: note.id })
+            .post("http://localhost:8080/unarchiveNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })

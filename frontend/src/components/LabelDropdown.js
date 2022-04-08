@@ -32,7 +32,7 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
     // fetching all labels from the current user
     useEffect(() => {
         axios
-            .get(`http://localhost:8000/getLabels/${user.email}`)
+            .get(`http://localhost:8080/getLabels/${user.email}`)
             .then((res) => {
                 setLabels(res.data);
                 setFilteredLabels(res.data);
@@ -58,7 +58,7 @@ const LabelDropdown = ({ anchorElLabel, handleCloseLabelMenu }) => {
     // adding label created by the user to the database and displaying it in the menu
     const handleCreateLabel = () => {
         axios
-            .post(`http://localhost:8000/createLabel`, {
+            .post(`http://localhost:8080/createLabel`, {
                 search,
                 email: user.email,
             })
