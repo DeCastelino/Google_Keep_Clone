@@ -22,7 +22,7 @@ const Archive = () => {
     // Fetching Archived Notes
     useEffect(() => {
         axios
-            .get(`http://localhost:8000/getArchivedNotes/${user.email}`)
+            .get(`http://localhost:8080/getArchivedNotes/${user.email}`)
             .then((res) => {
                 setNotes(res.data);
             })

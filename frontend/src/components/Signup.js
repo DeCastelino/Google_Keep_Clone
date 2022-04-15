@@ -35,7 +35,7 @@ const Signup = () => {
                 password,
             };
             axios
-                .post("http://localhost:8000/register", userInfo)
+                .post("http://localhost:8080/register", userInfo)
                 .then((res) => {
                     window.location.href = "/home";
                 })

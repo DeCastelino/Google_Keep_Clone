@@ -54,7 +54,7 @@ const TrashNoteCard = ({ note, key }) => {
     // Permanantly delete the selected note
     const handleDeleteNote = () => {
         axios
-            .post("http://localhost:8000/deleteNoteForever", { id: note.id })
+            .post("http://localhost:8080/deleteNoteForever", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })
@@ -66,7 +66,7 @@ const TrashNoteCard = ({ note, key }) => {
     // Restore the selected note
     const handleRestoreNote = () => {
         axios
-            .post("http://localhost:8000/restoreNote", { id: note.id })
+            .post("http://localhost:8080/restoreNote", { id: note.id })
             .then((result) => {
                 window.location.reload();
             })

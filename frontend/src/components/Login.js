@@ -26,7 +26,7 @@ const Login = () => {
         else {
             const userInfo = { email: email.toLowerCase(), password };
             axios
-                .post("http://localhost:8000/login", userInfo)
+                .post("http://localhost:8080/login", userInfo)
                 .then((res) => {
                     // store user info into localstorage
                     setUser(res.data);

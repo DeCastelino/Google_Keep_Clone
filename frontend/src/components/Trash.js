@@ -21,7 +21,7 @@ const Trash = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8000/getDeletedNotes/${user.email}`)
+            .get(`http://localhost:8080/getDeletedNotes/${user.email}`)
             .then((res) => {
                 setNotes(res.data);
             })
