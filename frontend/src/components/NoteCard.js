@@ -1,5 +1,6 @@
 // React Components
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // NPM Components
 import axios from "axios";
@@ -38,7 +39,6 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const PostItCard = styled(Card)`
     display: block;
-    background: #ffc;
     font-family: "Handlee", cursive;
     font-size: 1.5rem;
     box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.1);
@@ -56,7 +56,7 @@ const NoteCard = ({ note, labels, key }) => {
     const [pinned, setPinned] = useState(note.pinned);
     const [open, setOpen] = useState(false);
     const [display, setDisplay] = useState("block");
-    const [activeColor, setActiveColor] = useState("#ffc"); // post-it yellow
+    const [activeColor, setActiveColor] = useState(note.bgColor);
     const [title, setTitle] = useState(note.title);
     const [body, setBody] = useState(note.body);
     const [bgColor, setBgColor] = useState(note.bgColor);
@@ -65,6 +65,7 @@ const NoteCard = ({ note, labels, key }) => {
     const [openLabelMenu, setopenLabelMenu] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [labelSelect, setLabelSelect] = useState("");
+    const [selectedId, setSelectedId] = useState(null);
 
     // Toggling Pin
     const handlePinned = () => {
@@ -88,7 +89,7 @@ const NoteCard = ({ note, labels, key }) => {
 
     // removes the highlight when mouse is out of it
     const onMouseOut = () => {
-        setActiveColor("#ffc"); // post-it yello
+        setActiveColor(note.bgColor);
     };
 
     // Delete the selected Label from the note
@@ -191,7 +192,10 @@ const NoteCard = ({ note, labels, key }) => {
         <>
             <PostItCard
                 p={1}
-                sx={{ transform: `rotate(${note.rotate}deg)` }}
+                sx={{
+                    background: bgColor,
+                    transform: `rotate(${note.rotate}deg)`,
+                }}
                 onMouseOver={onMouseOver}
                 onMouseOut={onMouseOut}
             >
@@ -311,7 +315,9 @@ const NoteCard = ({ note, labels, key }) => {
                                     <IconButton onClick={handlePinned}>
                                         {pinned ? (
                                             <PushPinIcon
-                                                sx={{ fontSize: 20 }}
+                                                sx={{
+                                                    fontSize: 20,
+                                                }}
                                             />
                                         ) : (
                                             <PushPinOutlinedIcon
@@ -334,8 +340,13 @@ const NoteCard = ({ note, labels, key }) => {
                                 multiline
                                 size="small"
                                 value={title}
-                                InputProps={{ disableUnderline: true }}
-                                sx={{ paddingBottom: 2, width: "90%" }}
+                                InputProps={{
+                                    disableUnderline: true,
+                                }}
+                                sx={{
+                                    paddingBottom: 2,
+                                    width: "90%",
+                                }}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
                             <TextField
@@ -344,7 +355,9 @@ const NoteCard = ({ note, labels, key }) => {
                                 fullWidth
                                 multiline
                                 value={body}
-                                InputProps={{ disableUnderline: true }}
+                                InputProps={{
+                                    disableUnderline: true,
+                                }}
                                 sx={{ paddingBottom: 2 }}
                                 onChange={(e) => setBody(e.target.value)}
                             />
@@ -356,7 +369,10 @@ const NoteCard = ({ note, labels, key }) => {
                                         onDelete={() =>
                                             handleDeleteLabel(label)
                                         }
-                                        sx={{ padding: 0, marginRight: 1 }}
+                                        sx={{
+                                            padding: 0,
+                                            marginRight: 1,
+                                        }}
                                     />
                                 ))}
                             </Box>
